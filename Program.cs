@@ -1,23 +1,20 @@
-﻿using System;
-using System.Threading;
-using SAA.Controllers;
-using SAA.Models;
+﻿using SAA.Controllers;
 using SAA.Services;
 
 namespace SAA
 {
     public class Program
     {
-        private static readonly IPersistenceService _persistenceService = PersistenceService.Instance;
-        private static readonly IStudentService _studentService = StudentService.Instance;
-        private static readonly ISubjectService _subjectService = SubjectService.Instance;
-        private static readonly IStudentRecordService _studentRecordService = StudentRecordService.Instance;
+        // private static readonly IPersistenceService PersistenceService = Services.PersistenceService.Instance;
+        private static readonly IStudentService StudentService = Services.StudentService.Instance;
+        private static readonly ISubjectService SubjectService = Services.SubjectService.Instance;
+        private static readonly IStudentRecordService StudentRecordService = Services.StudentRecordService.Instance;
 
-        private static readonly StudentController _studentController = new StudentController(_studentService);
-        private static readonly SubjectController _subjectController = new SubjectController(_subjectService);
+        private static readonly StudentController StudentController = new StudentController(StudentService);
+        private static readonly SubjectController SubjectController = new SubjectController(SubjectService);
 
-        private static readonly StudentRecordController _studentRecordController =
-            new StudentRecordController(_studentRecordService, _studentService, _subjectService);
+        private static readonly StudentRecordController StudentRecordController =
+            new StudentRecordController(StudentRecordService, StudentService, SubjectService);
 
         public static void Main(string[] args)
         {
@@ -49,63 +46,23 @@ namespace SAA
                 }
 
                 PauseForUser();
+                Console.Clear();
             }
         }
 
-        private static void DrawAsciiArt()
-        {
-            string[] lines = new string[]
-            {
-                @"       _____/\\\\\\\\\\\__________/\\\\\\\\\_______________/\\\\\\\\\_____________________ ",
-                @"       ____/\\\/////////\\\______/\\\\\\\\\\\\\___________/\\\\\\\\\\\\\___________________",
-                @"       ______\//\\\______\///______/\\\/////////\\\_________/\\\/////////\\\_______________",
-                @"       ________\////\\\____________\/\\\_______\/\\\________\/\\\_______\/\\\______________",
-                @"       _____________\////\\\_________\/\\\\\\\\\\\\\\\________\/\\\\\\\\\\\\\\\____________",
-                @"       _________________\////\\\_______\/\\\/////////\\\________\/\\\/////////\\\__________",
-                @"       ________________________/\\\______\//\\\_____\/\\\_______\/\\\________\/\\\_________",
-                @"       _______________\///\\\\\\\\\\\/______\/\\\_______\/\\\________\/\\\_______\/\\\_____",
-                @"       __________________\///////////________\///________\///_________\///________\///_____",
-                "",
-                "         -----------------------------------------------------------------------------------",
-                "         |++++----->        SISTEMA    DE    ADMINISTRACION    ACADEMICO         <------++++|",
-                "         -----------------------------------------------------------------------------------",
-            };
-
-            foreach (string line in lines)
-            {
-                Console.WriteLine(line);
-                Thread.Sleep(50);
-            }
-
-            Console.WriteLine("\nPresione cualquier tecla para continuar...");
-            Console.ReadKey(true);
-            Console.Clear();
-        }
-
-        private static void ShowMainMenu()
-        {
-            Console.WriteLine("╔══════════════════════════════════════╗");
-            Console.WriteLine("║            Menú Principal            ║");
-            Console.WriteLine("╠══════════════════════════════════════╣");
-            Console.WriteLine("║ [1] Gestión de Alumnos               ║");
-            Console.WriteLine("║ [2] Gestión de Materias              ║");
-            Console.WriteLine("║ [3] Gestión de Registros de Alumnos  ║");
-            Console.WriteLine("║ [4] Salir                            ║");
-            Console.WriteLine("╚══════════════════════════════════════╝");
-            Console.Write("Seleccione una opción: ");
-        }
 
         private static void PauseForUser()
         {
             Console.WriteLine("Presione una tecla para continuar...");
             Console.ReadKey(true);
+            Console.Clear();
         }
 
         private static void ManageStudents()
         {
+            Console.Clear();
             while (true)
             {
-                Console.Clear();
                 ShowStudentMenu();
                 var option = Console.ReadLine();
 
@@ -114,22 +71,22 @@ namespace SAA
                     switch (option)
                     {
                         case "1":
-                            _studentController.ShowAllStudents();
+                            StudentController.ShowAllStudents();
                             break;
                         case "2":
-                            _studentController.ShowActiveStudents();
+                            StudentController.ShowActiveStudents();
                             break;
                         case "3":
-                            _studentController.ShowInactiveStudents();
+                            StudentController.ShowInactiveStudents();
                             break;
                         case "4":
-                            _studentController.AddStudent();
+                            StudentController.AddStudent();
                             break;
                         case "5":
-                            _studentController.UpdateStudent();
+                            StudentController.UpdateStudent();
                             break;
                         case "6":
-                            _studentController.DeleteStudent();
+                            StudentController.DeleteStudent();
                             break;
                         case "7":
                             return;
@@ -144,7 +101,7 @@ namespace SAA
                 }
                 catch (FormatException ex)
                 {
-                    Console.WriteLine("Error: Formato inválido. Asegúrese de ingresar el dato correcto.");
+                    Console.WriteLine($"Error: Formato inválido. Asegúrese de ingresar el dato correcto ::  {ex.Message}");
                 }
                 catch (Exception ex)
                 {
@@ -152,7 +109,129 @@ namespace SAA
                 }
 
                 PauseForUser();
+                Console.Clear();
             }
+        }
+
+
+        private static void ManageSubjects()
+        {
+            Console.Clear();
+
+            while (true)
+            {
+                ShowSubjectMenu();
+                var option = Console.ReadLine();
+
+                try
+                {
+                    switch (option)
+                    {
+                        case "1":
+                            SubjectController.ShowAllSubjects();
+                            break;
+                        case "2":
+                            SubjectController.AddSubject();
+                            break;
+                        case "3":
+                            SubjectController.UpdateSubject();
+                            break;
+                        case "4":
+                            SubjectController.DeleteSubject();
+                            break;
+                        case "5":
+                            return;
+                        default:
+                            Console.WriteLine("Opción no válida. Por favor, seleccione una opción válida.");
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+
+                PauseForUser();
+                Console.Clear();
+            }
+        }
+
+
+        private static void ManageStudentRecords()
+        {
+            Console.Clear();
+            while (true)
+            {
+                ShowStudentRecordMenu();
+                var option = Console.ReadLine();
+
+                try
+                {
+                    switch (option)
+                    {
+                        case "1":
+                            StudentRecordController.ShowAllStudentRecords();
+                            break;
+                        case "2":
+                            StudentRecordController.ShowStudentRecordsByStudentId();
+                            break;
+                        case "3":
+                            StudentRecordController.ShowStudentRecordsBySubjectId();
+                            break;
+                        case "4":
+                            StudentRecordController.AddStudentRecord();
+                            break;
+                        case "5":
+                            StudentRecordController.UpdateStudentRecord();
+                            break;
+                        case "6":
+                            StudentRecordController.DeleteStudentRecord();
+                            break;
+                        case "7":
+                            return;
+                        default:
+                            Console.WriteLine("Opción no válida. Por favor, seleccione una opción válida.");
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+
+                PauseForUser();
+                Console.Clear();
+            }
+        }
+
+        private static void ShowStudentRecordMenu()
+        {
+            Console.WriteLine("╔══════════════════════════════════════════╗");
+            Console.WriteLine("║ Gestión de Notas de Alumnos              ║");
+            Console.WriteLine("╠══════════════════════════════════════════╣");
+            Console.WriteLine("║ [1] Mostrar todos los registros          ║");
+            Console.WriteLine("║ [2] Mostrar registros de alumno por id   ║");
+            Console.WriteLine("║ [3] Mostrar registros de materia por id  ║");
+            Console.WriteLine("║ [4] Alta de registro                     ║");
+            Console.WriteLine("║ [5] Modificación de registro             ║");
+            Console.WriteLine("║ [6] Baja de registro                     ║");
+            Console.WriteLine("║ [7] Volver al menú principal             ║");
+            Console.WriteLine("╚══════════════════════════════════════════╝");
+            Console.Write("Seleccione una opción: ");
+        }
+
+        private static void ShowSubjectMenu()
+        {
+            Console.WriteLine("╔══════════════════════════════════════╗");
+            Console.WriteLine("║          Gestión de Materias         ║");
+            Console.WriteLine("╠══════════════════════════════════════╣");
+            Console.WriteLine("║ [1] Mostrar todas las materias       ║");
+            Console.WriteLine("║ [2] Alta de materia                  ║");
+            Console.WriteLine("║ [3] Modificación de materia          ║");
+            Console.WriteLine("║ [4] Baja de materia                  ║");
+            Console.WriteLine("║ [5] Volver al menú principal         ║");
+            Console.WriteLine("╚══════════════════════════════════════╝");
+            Console.Write("Seleccione una opción: ");
         }
 
         private static void ShowStudentMenu()
@@ -171,112 +250,47 @@ namespace SAA
             Console.Write("Seleccione una opción: ");
         }
 
-        private static void ManageSubjects()
-        {
-            while (true)
-            {
-                Console.Clear();
-                ShowSubjectMenu();
-                var option = Console.ReadLine();
-
-                try
-                {
-                    switch (option)
-                    {
-                        case "1":
-                            _subjectController.ShowAllSubjects();
-                            break;
-                        case "2":
-                            _subjectController.AddSubject();
-                            break;
-                        case "3":
-                            _subjectController.UpdateSubject();
-                            break;
-                        case "4":
-                            _subjectController.DeleteSubject();
-                            break;
-                        case "5":
-                            return;
-                        default:
-                            Console.WriteLine("Opción no válida. Por favor, seleccione una opción válida.");
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
-
-                PauseForUser();
-            }
-        }
-
-        private static void ShowSubjectMenu()
+        private static void ShowMainMenu()
         {
             Console.WriteLine("╔══════════════════════════════════════╗");
-            Console.WriteLine("║          Gestión de Materias         ║");
+            Console.WriteLine("║            Menú Principal            ║");
             Console.WriteLine("╠══════════════════════════════════════╣");
-            Console.WriteLine("║ [1] Mostrar todas las materias       ║");
-            Console.WriteLine("║ [2] Alta de materia                  ║");
-            Console.WriteLine("║ [3] Modificación de materia          ║");
-            Console.WriteLine("║ [4] Baja de materia                  ║");
-            Console.WriteLine("║ [5] Volver al menú principal         ║");
+            Console.WriteLine("║ [1] Gestión de Alumnos               ║");
+            Console.WriteLine("║ [2] Gestión de Materias              ║");
+            Console.WriteLine("║ [3] Gestión de Registros de Alumnos  ║");
+            Console.WriteLine("║ [4] Salir                            ║");
             Console.WriteLine("╚══════════════════════════════════════╝");
             Console.Write("Seleccione una opción: ");
         }
 
-        private static void ManageStudentRecords()
+        private static void DrawAsciiArt()
         {
-            while (true)
+            string[] lines = new string[]
             {
-                Console.Clear();
-                ShowStudentRecordMenu();
-                var option = Console.ReadLine();
+                @"_____/\\\\\\\\\\\__________/\\\\\\\\\_______________/\\\\\\\\\_____________________ ",
+                @"____/\\\/////////\\\______/\\\\\\\\\\\\\___________/\\\\\\\\\\\\\___________________",
+                @"______\//\\\______\///______/\\\/////////\\\_________/\\\/////////\\\_______________",
+                @"________\////\\\____________\/\\\_______\/\\\________\/\\\_______\/\\\______________",
+                @"_____________\////\\\_________\/\\\\\\\\\\\\\\\________\/\\\\\\\\\\\\\\\____________",
+                @"_________________\////\\\_______\/\\\/////////\\\________\/\\\/////////\\\__________",
+                @"_______________________//\\\______\//\\\_____\/\\\_________\/\\\________\/\\\_______",
+                @"_______________\///\\\\\\\\\\\/______\/\\\_______\/\\\________\/\\\_______\/\\\_____",
+                @"__________________\///////////________\///________\///_________\///________\///_____",
+                "",
+                "------------------------------------------------------------------------------------",
+                "|++++------>        SISTEMA    DE    ADMINISTRACION    ACADEMICO         <------++++|",
+                "------------------------------------------------------------------------------------",
+            };
 
-                try
-                {
-                    switch (option)
-                    {
-                        case "1":
-                            _studentRecordController.ShowAllStudentRecords();
-                            break;
-                        case "2":
-                            _studentRecordController.AddStudentRecord();
-                            break;
-                        case "3":
-                            _studentRecordController.UpdateStudentRecord();
-                            break;
-                        case "4":
-                            _studentRecordController.DeleteStudentRecord();
-                            break;
-                        case "5":
-                            return;
-                        default:
-                            Console.WriteLine("Opción no válida. Por favor, seleccione una opción válida.");
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
-
-                PauseForUser();
+            foreach (string line in lines)
+            {
+                Console.WriteLine(line);
+                Thread.Sleep(50);
             }
-        }
 
-        private static void ShowStudentRecordMenu()
-        {
-            Console.WriteLine("╔═══════════════════════════════════════╗");
-            Console.WriteLine("║ Gestión de Notas de Alumnos           ║");
-            Console.WriteLine("╠═══════════════════════════════════════╣");
-            Console.WriteLine("║ [1] Mostrar todos los registros       ║");
-            Console.WriteLine("║ [2] Alta de registro                  ║");
-            Console.WriteLine("║ [3] Modificación de registro          ║");
-            Console.WriteLine("║ [4] Baja de registro                  ║");
-            Console.WriteLine("║ [5] Volver al menú principal          ║");
-            Console.WriteLine("╚═══════════════════════════════════════╝");
-            Console.Write("Seleccione una opción: ");
+            Console.WriteLine("\nPresione cualquier tecla para continuar...");
+            Console.ReadKey(true);
+            Console.Clear();
         }
     }
 }
