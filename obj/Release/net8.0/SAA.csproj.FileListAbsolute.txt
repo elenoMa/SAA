@@ -1,0 +1,14 @@
+C:\Users\Mariano\RiderProjects\SAA\SAA\bin\Release\net8.0\SAA.exe
+C:\Users\Mariano\RiderProjects\SAA\SAA\bin\Release\net8.0\SAA.deps.json
+C:\Users\Mariano\RiderProjects\SAA\SAA\bin\Release\net8.0\SAA.runtimeconfig.json
+C:\Users\Mariano\RiderProjects\SAA\SAA\bin\Release\net8.0\SAA.dll
+C:\Users\Mariano\RiderProjects\SAA\SAA\bin\Release\net8.0\SAA.pdb
+C:\Users\Mariano\RiderProjects\SAA\SAA\obj\Release\net8.0\SAA.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Mariano\RiderProjects\SAA\SAA\obj\Release\net8.0\SAA.AssemblyInfoInputs.cache
+C:\Users\Mariano\RiderProjects\SAA\SAA\obj\Release\net8.0\SAA.AssemblyInfo.cs
+C:\Users\Mariano\RiderProjects\SAA\SAA\obj\Release\net8.0\SAA.csproj.CoreCompileInputs.cache
+C:\Users\Mariano\RiderProjects\SAA\SAA\obj\Release\net8.0\SAA.dll
+C:\Users\Mariano\RiderProjects\SAA\SAA\obj\Release\net8.0\refint\SAA.dll
+C:\Users\Mariano\RiderProjects\SAA\SAA\obj\Release\net8.0\SAA.pdb
+C:\Users\Mariano\RiderProjects\SAA\SAA\obj\Release\net8.0\SAA.genruntimeconfig.cache
+C:\Users\Mariano\RiderProjects\SAA\SAA\obj\Release\net8.0\ref\SAA.dll

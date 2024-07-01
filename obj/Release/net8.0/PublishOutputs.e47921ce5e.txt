@@ -1,0 +1,5 @@
+C:\Users\Mariano\RiderProjects\SAA\SAA\bin\Release\net8.0\publish\SAA.exe
+C:\Users\Mariano\RiderProjects\SAA\SAA\bin\Release\net8.0\publish\SAA.dll
+C:\Users\Mariano\RiderProjects\SAA\SAA\bin\Release\net8.0\publish\SAA.deps.json
+C:\Users\Mariano\RiderProjects\SAA\SAA\bin\Release\net8.0\publish\SAA.runtimeconfig.json
+C:\Users\Mariano\RiderProjects\SAA\SAA\bin\Release\net8.0\publish\SAA.pdb
