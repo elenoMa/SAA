@@ -97,5 +97,23 @@
     "DateOfBirth": "1999-04-12T00:00:00",
     "Address": "Witcomb 38",
     "IsActive": true
+  },
+  {
+    "Id": 13,
+    "FirstName": "Juan",
+    "LastName": "Perez",
+    "DNI": "43657888",
+    "DateOfBirth": "1996-04-12T00:00:00",
+    "Address": "Www",
+    "IsActive": true
+  },
+  {
+    "Id": 14,
+    "FirstName": "mariano",
+    "LastName": "eleno",
+    "DNI": "43444444",
+    "DateOfBirth": "1999-12-12T00:00:00",
+    "Address": "2ww",
+    "IsActive": true
   }
 ]

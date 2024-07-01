@@ -1,4 +1,5 @@
-﻿using SAA.Models;
+﻿using System.Globalization;
+using SAA.Models;
 using SAA.Services;
 
 namespace SAA.Controllers;
@@ -38,6 +39,7 @@ public class StudentRecordController(
         }
     }
 
+
     public void ShowStudentRecordsBySubjectId()
     {
         try
@@ -54,6 +56,7 @@ public class StudentRecordController(
             Console.WriteLine($"Error al buscar registros académicos por ID de materia: {ex.Message}");
         }
     }
+
 
     public void AddStudentRecord()
     {
@@ -137,7 +140,7 @@ public class StudentRecordController(
 
             Console.WriteLine($"¿Está seguro que desea eliminar el registro académico ID {recordId}? (s/n): ");
             var confirmation = Console.ReadLine();
-            if (confirmation.ToLower() == "s")
+            if (confirmation != null && confirmation.ToLower() == "s")
             {
                 studentRecordService.DeleteStudentRecord(recordId);
                 Console.WriteLine("Registro académico eliminado correctamente.");
@@ -149,25 +152,28 @@ public class StudentRecordController(
         }
     }
 
-    private void DisplayStudentRecords(List<StudentRecord> records)
+    private void DisplayStudentRecords(List<StudentRecord>? records)
     {
-        const int tableWidth = 108; // Ancho total de la tabla, incluyendo los bordes
-
-        if (records.Count == 0)
-        {
-            Console.WriteLine("\n╔════════╦════════════╦═════════════╦══════╦═════════╦════════════════════╗");
-            Console.WriteLine("║".PadRight(tableWidth - 1) + "║");
-            string centeredMessage = "No se encontraron registros académicos.".PadLeft((tableWidth + "No se encontraron registros académicos.".Length) / 2).PadRight(tableWidth - 1);
-            Console.WriteLine($"║{centeredMessage}║");
-            Console.WriteLine("║".PadRight(tableWidth - 1) + "║");
-            Console.WriteLine("╚════════╩════════════╩═════════════╩══════╩═════════╩════════════════════╝");
-            return;
-        }
+        const int tableWidth = 76; // Ancho total de la tabla, incluyendo los bordes
 
         // Encabezado de la tabla
         Console.WriteLine("\n╔════════╦════════════╦═════════════╦══════╦═══════════╦════════════════════╗");
         Console.WriteLine("║   ID   ║ Alumno ID  ║ Materia ID  ║ Nota ║   Estado  ║        Fecha       ║");
         Console.WriteLine("╠════════╬════════════╬═════════════╬══════╬═══════════╠════════════════════╣");
+        
+        if (records.Count == 0)
+        {
+
+            Console.WriteLine("║".PadRight(tableWidth ) + "║");
+            string centeredMessage = "No se encontraron registros académicos.".PadLeft((tableWidth + "No se encontraron registros académicos.".Length) / 2).PadRight(tableWidth - 1);
+            Console.WriteLine($"║{centeredMessage}║");
+            Console.WriteLine("║".PadRight(tableWidth ) + "║");
+            Console.WriteLine("╚════════╩════════════╩═════════════╩══════╩═══════════╩════════════════════╝");
+
+            return;
+        }
+
+
 
         // Filas de datos
         foreach (var record in records)
@@ -175,7 +181,7 @@ public class StudentRecordController(
             string id = record.Id.ToString().PadRight(6);
             string studentId = record.StudentId.ToString().PadRight(10);
             string subjectId = record.SubjectId.ToString().PadRight(11);
-            string grade = record.Grade.ToString().PadRight(4);
+            string grade = record.Grade.ToString(CultureInfo.InvariantCulture).PadRight(4);
             string status = record.Status.PadRight(9); // Ajustar espacio para estado
             string date = record.Date.ToString("yyyy-MM-dd").PadRight(18); // Formatear la fecha
 
@@ -224,7 +230,7 @@ public class StudentRecordController(
         do
         {
             Console.Write(prompt);
-            input = Console.ReadLine()?.Trim();
+            input = Console.ReadLine()?.Trim() ?? throw new InvalidOperationException();
             if (string.IsNullOrEmpty(input)) Console.WriteLine("Error: El valor no puede estar vacío.");
         } while (string.IsNullOrEmpty(input));
 

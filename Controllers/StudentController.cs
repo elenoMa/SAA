@@ -6,18 +6,18 @@ namespace SAA.Controllers;
 
 public class StudentController
 {
-    private readonly IStudentService studentService;
+    private readonly IStudentService _studentService;
 
     public StudentController(IStudentService studentService)
     {
-        this.studentService = studentService;
+        this._studentService = studentService;
     }
 
     public void ShowAllStudents()
     {
         try
         {
-            var students = studentService.GetAllStudents();
+            var students = _studentService.GetAllStudents();
             DisplayStudents(students);
         }
         catch (Exception ex)
@@ -31,7 +31,7 @@ public class StudentController
     {
         try
         {
-            var students = studentService.GetAllStudents().FindAll(s => s.IsActive);
+            var students = _studentService.GetAllStudents().FindAll(s => s.IsActive);
             DisplayStudents(students);
         }
         catch (Exception ex)
@@ -45,7 +45,7 @@ public class StudentController
     {
         try
         {
-            var students = studentService.GetAllStudents().FindAll(s => !s.IsActive);
+            var students = _studentService.GetAllStudents().FindAll(s => !s.IsActive);
             DisplayStudents(students);
         }
         catch (Exception ex)
@@ -63,7 +63,7 @@ public class StudentController
 
             var firstName = ReadNonEmptyString("Nombre");
             var lastName = ReadNonEmptyString("Apellido");
-            var dni = ReadValidDNI();
+            var dni = ReadValidDni();
             var birthDate = ReadValidBirthDate();
             var address = ReadNonEmptyString("Domicilio");
 
@@ -74,16 +74,16 @@ public class StudentController
                 return;
             }
 
-            var isDNIAvailable = studentService.IsDNIAvailable(dni);
+            var isDniAvailable = _studentService.IsDniAvailable(dni);
 
-            if (!isDNIAvailable)
-                throw new DuplicateDNIException("El DNI ingresado ya está registrado para otro alumno activo.");
+            if (!isDniAvailable)
+                throw new DuplicateDniException("El DNI ingresado ya está registrado para otro alumno activo.");
 
             var newStudent = CreateStudent(firstName, lastName, dni, birthDate, address);
-            studentService.AddStudent(newStudent);
+            _studentService.AddStudent(newStudent);
             Console.WriteLine("Alumno agregado correctamente.");
         }
-        catch (DuplicateDNIException ex)
+        catch (DuplicateDniException ex)
         {
             LogError(ex);
             Console.WriteLine(ex.Message);
@@ -104,7 +104,7 @@ public class StudentController
             var studentId = ReadValidId("ID del alumno a modificar");
             if (studentId == -1) return;
 
-            var studentToUpdate = studentService.GetStudentById(studentId);
+            var studentToUpdate = _studentService.GetStudentById(studentId);
             if (studentToUpdate == null)
             {
                 Console.WriteLine("No se encontró ningún alumno con ese ID.");
@@ -112,7 +112,7 @@ public class StudentController
             }
 
             Console.WriteLine(
-                $"Alumno seleccionado: {studentToUpdate.FirstName} {studentToUpdate.LastName} (DNI: {studentToUpdate.DNI})");
+                $"Alumno seleccionado: {studentToUpdate.FirstName} {studentToUpdate.LastName} (DNI: {studentToUpdate.Dni})");
 
             var newFirstName = ReadValidInput<string>("Nuevo Nombre", input => !string.IsNullOrEmpty(input));
             if (!string.IsNullOrEmpty(newFirstName)) studentToUpdate.FirstName = newFirstName;
@@ -120,15 +120,14 @@ public class StudentController
             var newLastName = ReadValidInput<string>("Nuevo Apellido", input => !string.IsNullOrEmpty(input));
             if (!string.IsNullOrEmpty(newLastName)) studentToUpdate.LastName = newLastName;
 
-            var newDni = ReadValidInput<string>("Nuevo DNI (7 u 8 dígitos numéricos)", IsDNIValid);
-            if (!string.IsNullOrEmpty(newDni) && newDni != studentToUpdate.DNI)
-                ValidateAndUpdateDNI(studentToUpdate, newDni);
+            var newDni = ReadValidInput<string>("Nuevo DNI (7 u 8 dígitos numéricos)", IsDniValid);
+            if (!string.IsNullOrEmpty(newDni) && newDni != studentToUpdate.Dni)
+                ValidateAndUpdateDni(studentToUpdate, newDni);
 
             var newBirthDate = ReadValidInput<DateTime>("Nueva Fecha de Nacimiento (dd/mm/yyyy)", input =>
             {
-                DateTime birthDate;
                 return DateTime.TryParseExact(input, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None,
-                    out birthDate);
+                    out _);
             });
             if (newBirthDate != DateTime.MinValue) studentToUpdate.DateOfBirth = newBirthDate;
 
@@ -137,10 +136,10 @@ public class StudentController
 
             UpdateStudentStatus(studentToUpdate);
 
-            studentService.UpdateStudent(studentToUpdate);
+            _studentService.UpdateStudent(studentToUpdate);
             Console.WriteLine("Datos del alumno actualizados correctamente.");
         }
-        catch (DuplicateDNIException ex)
+        catch (DuplicateDniException ex)
         {
             LogError(ex);
             Console.WriteLine(ex.Message);
@@ -161,7 +160,7 @@ public class StudentController
             var studentId = ReadValidId("ID del alumno a dar de baja");
             if (studentId == -1) return;
 
-            var studentToDelete = studentService.GetStudentById(studentId);
+            var studentToDelete = _studentService.GetStudentById(studentId);
             if (studentToDelete == null)
             {
                 Console.WriteLine("No se encontró ningún alumno con ese ID.");
@@ -171,9 +170,9 @@ public class StudentController
             Console.WriteLine(
                 $"¿Está seguro que desea dar de baja al alumno {studentToDelete.FirstName} {studentToDelete.LastName}? (s/n)");
             var confirmation = Console.ReadLine();
-            if (confirmation.ToLower() == "s")
+            if (confirmation != null && confirmation.Equals("s", StringComparison.CurrentCultureIgnoreCase))
             {
-                studentService.DeleteStudent(studentId);
+                _studentService.DeleteStudent(studentId);
                 Console.WriteLine("Alumno dado de baja correctamente.");
             }
         }
@@ -192,16 +191,16 @@ public class StudentController
         {
             FirstName = firstName,
             LastName = lastName,
-            DNI = dni,
+            Dni = dni,
             DateOfBirth = birthDate,
             Address = address,
             IsActive = true
         };
     }
 
-    private string ReadValidDNI()
+    private string ReadValidDni()
     {
-        return ReadValidInput<string>("DNI (7 u 8 dígitos numéricos)", IsDNIValid);
+        return ReadValidInput<string>("DNI (7 u 8 dígitos numéricos)", IsDniValid);
     }
 
     private string ReadNonEmptyString(string prompt)
@@ -211,31 +210,53 @@ public class StudentController
 
     private DateTime ReadValidBirthDate()
     {
-        return ReadValidInput<DateTime>("Fecha de Nacimiento (dd/mm/yyyy)", input =>
+        return ReadValidInput<DateTime>("Fecha de Nacimiento (dd/MM/yyyy)", input =>
         {
             DateTime birthDate;
-            return DateTime.TryParseExact(input, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None,
-                out birthDate);
+            bool isValid = DateTime.TryParseExact(input, "dd/MM/yyyy", CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out birthDate);
+
+            if (!isValid || birthDate > DateTime.Today || (DateTime.Today - birthDate).TotalDays > 365 * 100)
+            {
+                Console.WriteLine("La fecha ingresada no es válida.");
+                return false;
+            }
+
+            return true;
         });
     }
 
     private T ReadValidInput<T>(string prompt, Func<string, bool> isValid)
     {
         const string promptStyle = "╚═══> ";
-        Console.Write($"{promptStyle}{prompt}: ");
         string input;
-        do
+
+        while (true)
         {
-            input = Console.ReadLine()?.Trim();
-            if (!isValid(input))
+            Console.Write($"{promptStyle}{prompt}: ");
+            input = Console.ReadLine()?.Trim() ?? throw new InvalidOperationException();
+
+            if (isValid(input))
+            {
+                try
+                {
+                    return (T)Convert.ChangeType(input, typeof(T));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: No se pudo convertir '{input}' a tipo {typeof(T).Name}. {ex.Message}");
+                }
+            }
+            else
+            {
                 Console.WriteLine(
                     $"Error: Valor ingresado no válido para '{prompt.TrimEnd(':')}'. Inténtelo nuevamente.");
-        } while (!isValid(input));
-
-        return (T)Convert.ChangeType(input, typeof(T));
+            }
+        }
     }
 
-    private bool IsDNIValid(string dni)
+
+    private bool IsDniValid(string dni)
     {
         return !string.IsNullOrEmpty(dni) && dni.Length >= 7 && dni.Length <= 8 && dni.All(char.IsDigit);
     }
@@ -256,43 +277,44 @@ public class StudentController
         return studentId;
     }
 
-    private void ValidateAndUpdateDNI(Student studentToUpdate, string newDni)
+    private void ValidateAndUpdateDni(Student studentToUpdate, string newDni)
     {
-        var existingStudent = studentService.GetAllStudents().Find(s => s.DNI == newDni);
+        var existingStudent = _studentService.GetAllStudents().Find(s => s.Dni == newDni);
         if (existingStudent != null && existingStudent.Id != studentToUpdate.Id)
         {
             if (existingStudent.IsActive)
             {
-                throw new DuplicateDNIException("Ya existe un alumno activo con ese DNI.");
+                throw new DuplicateDniException("Ya existe un alumno activo con ese DNI.");
             }
 
             Console.WriteLine(
                 "Ya existe un alumno inactivo con ese DNI. ¿Desea reactivarlo y desactivar el actual? (s/n): ");
             var reactivateOption = Console.ReadLine();
-            if (reactivateOption.ToLower() == "s")
+            if (reactivateOption != null && reactivateOption.ToLower() == "s")
             {
                 existingStudent.IsActive = true;
                 studentToUpdate.IsActive = false;
-                studentService.UpdateStudent(existingStudent);
-                studentService.UpdateStudent(studentToUpdate);
+                _studentService.UpdateStudent(existingStudent);
+                _studentService.UpdateStudent(studentToUpdate);
                 Console.WriteLine("Alumno reactivado correctamente.");
             }
 
             return;
         }
 
-        studentToUpdate.DNI = newDni;
+        studentToUpdate.Dni = newDni;
     }
 
     private void UpdateStudentStatus(Student studentToUpdate)
     {
         if (studentToUpdate.IsActive)
-            Console.Write("¿Desea desactivar al alumno? (s/n): ");
+            Console.Write("¿Desea desactivar al alumno? (s/n): ")
+                ;
         else
             Console.Write("¿Desea activar al alumno? (s/n): ");
 
         var changeOption = Console.ReadLine();
-        if (changeOption.ToLower() == "s")
+        if (changeOption != null && changeOption.ToLower() == "s")
         {
             studentToUpdate.IsActive = !studentToUpdate.IsActive;
             Console.WriteLine(
@@ -304,31 +326,32 @@ public class StudentController
         }
     }
 
-    private void DisplayStudents(List<Student> students)
+    private void DisplayStudents(List<Student>? students)
     {
-        const int tableWidth = 128; // Ancho total de la tabla, incluyendo los bordes
-
-        if (students.Count == 0)
-        {
-            Console.WriteLine(
-                "\n╔════════╦════════════════════════════════╦════════════════╦════════╦════════════════╦═════════════════════════════════════╗");
-            Console.WriteLine("║".PadRight(tableWidth - 1) + "║");
-            string centeredMessage = "No se encontraron alumnos."
-                .PadLeft((tableWidth + "No se encontraron alumnos.".Length) / 2).PadRight(tableWidth - 1);
-            Console.WriteLine($"║{centeredMessage}║");
-            Console.WriteLine("║".PadRight(tableWidth - 1) + "║");
-            Console.WriteLine(
-                "╚════════╩════════════════════════════════╩════════════════╩════════╩════════════════╩═════════════════════════════════════╝");
-            return;
-        }
+        const int tableWidth = 138; // Ancho total de la tabla, incluyendo los bordes
 
         // Encabezado de la tabla
         Console.WriteLine(
             "\n╔════════╦════════════════════════════════╦════════════════╦════════╦════════════════╦════════════════════════════════════════════════════╗");
         Console.WriteLine(
-            "║   ID   ║             Nombre             ║       DNI      ║ Activo ║ Fecha de Nac.  ║                      Dirección              556       ║");
+            "║   ID   ║             Nombre             ║       DNI      ║ Activo ║ Fecha de Nac.  ║                      Dirección                     ║");
         Console.WriteLine(
             "╠════════╬════════════════════════════════╬════════════════╬════════╬════════════════╬════════════════════════════════════════════════════╣");
+        
+        if (students.Count == 0)
+        {
+            // Console.WriteLine(
+            Console.WriteLine("║".PadRight(tableWidth) + "║");
+            string centeredMessage = "No se encontraron alumnos."
+                .PadLeft((tableWidth + "No se encontraron alumnos.".Length) / 2).PadRight(tableWidth - 1);
+            Console.WriteLine($"║{centeredMessage}║");
+            Console.WriteLine("║".PadRight(tableWidth) + "║");
+            // Pie de la tabla
+            Console.WriteLine(
+                "╚════════╩════════════════════════════════╩════════════════╩════════╩════════════════╩════════════════════════════════════════════════════╝");
+            return;
+        }
+
 
         // Filas de datos
         foreach (var student in students)
@@ -336,7 +359,7 @@ public class StudentController
             string id = student.Id.ToString().PadRight(6);
             string name =
                 (student.FirstName + " " + student.LastName).PadRight(30); // Aumentar el espacio para el nombre
-            string dni = student.DNI.PadRight(14);
+            string dni = student.Dni.PadRight(14);
             string isActive = student.IsActive ? "Sí" : "No";
             string dateOfBirth = student.DateOfBirth.ToShortDateString().PadRight(14); // Formatear la fecha
             string address = student.Address.PadRight(50); // Aumentar el espacio para la dirección
@@ -357,17 +380,20 @@ public class StudentController
     }
 }
 
-public class DuplicateDNIException : Exception
+public class DuplicateDniException : Exception
 {
-    public DuplicateDNIException()
+    // Constructor sin parámetros
+    public DuplicateDniException()
     {
     }
 
-    public DuplicateDNIException(string message) : base(message)
+    // Constructor que permite especificar un mensaje de error
+    public DuplicateDniException(string message) : base(message)
     {
     }
 
-    public DuplicateDNIException(string message, Exception inner) : base(message, inner)
+    // Constructor que permite especificar un mensaje de error y una excepción interna
+    public DuplicateDniException(string message, Exception inner) : base(message, inner)
     {
     }
 }

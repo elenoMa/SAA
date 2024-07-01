@@ -2,47 +2,60 @@
 using System.Collections.Generic;
 using System.Linq;
 using SAA.Models;
+using SAA.Services.impl;
 
-namespace SAA.Services;
-
-public class StudentRecordService(IPersistenceService persistenceService) : IStudentRecordService
+namespace SAA.Services
 {
-    private readonly string _resourceName = "student_records";
-
-    public List<StudentRecord> GetAllStudentRecords()
+    public class StudentRecordService : IStudentRecordService
     {
-        return persistenceService.GetAll<StudentRecord>(_resourceName);
-    }
+        private static readonly StudentRecordService _instance = new StudentRecordService(new PersistenceService());
+        private readonly IPersistenceService _persistenceService;
+        private readonly string _resourceName = "student_records";
 
-    public StudentRecord GetStudentRecordById(int id)
-    {
-        return persistenceService.GetById<StudentRecord>(id, _resourceName);
-    }
+        // Constructor privado para evitar instanciación externa
+        private StudentRecordService(IPersistenceService persistenceService)
+        {
+            _persistenceService = persistenceService;
+        }
 
-    public void AddStudentRecord(StudentRecord record)
-    {
-        persistenceService.AddOrUpdate(record, _resourceName);
-    }
+        // Propiedad estática para acceder a la instancia única
+        public static StudentRecordService Instance => _instance;
 
-    public void UpdateStudentRecord(StudentRecord record)
-    {
-        persistenceService.AddOrUpdate(record, _resourceName);
-    }
+        public List<StudentRecord>? GetAllStudentRecords()
+        {
+            return _persistenceService.GetAll<StudentRecord>(_resourceName);
+        }
 
-    public void DeleteStudentRecord(int id)
-    {
-        persistenceService.Delete<StudentRecord>(id, _resourceName);
-    }
+        public StudentRecord? GetStudentRecordById(int id)
+        {
+            return _persistenceService.GetById<StudentRecord>(id, _resourceName);
+        }
 
-    public List<StudentRecord> GetStudentRecordsByStudentId(int studentId)
-    {
-        List<StudentRecord> allRecords = GetAllStudentRecords();
-        return allRecords.Where(r => r.StudentId == studentId).ToList();
-    }
+        public void AddStudentRecord(StudentRecord record)
+        {
+            _persistenceService.AddOrUpdate(record, _resourceName);
+        }
 
-    public List<StudentRecord> GetStudentRecordsBySubjectId(int subjectId)
-    {
-        List<StudentRecord> allRecords = GetAllStudentRecords();
-        return allRecords.Where(r => r.SubjectId == subjectId).ToList();
+        public void UpdateStudentRecord(StudentRecord record)
+        {
+            _persistenceService.AddOrUpdate(record, _resourceName);
+        }
+
+        public void DeleteStudentRecord(int id)
+        {
+            _persistenceService.Delete<StudentRecord>(id, _resourceName);
+        }
+
+        public List<StudentRecord>? GetStudentRecordsByStudentId(int studentId)
+        {
+            List<StudentRecord>? allRecords = GetAllStudentRecords();
+            return allRecords.Where(r => r.StudentId == studentId).ToList();
+        }
+
+        public List<StudentRecord>? GetStudentRecordsBySubjectId(int subjectId)
+        {
+            List<StudentRecord>? allRecords = GetAllStudentRecords();
+            return allRecords.Where(r => r.SubjectId == subjectId).ToList();
+        }
     }
 }

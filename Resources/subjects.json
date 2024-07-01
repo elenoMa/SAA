@@ -8,5 +8,10 @@
     "Id": 2,
     "Name": "Programacion I",
     "IsActive": true
+  },
+  {
+    "Id": 3,
+    "Name": "Fisica",
+    "IsActive": true
   }
 ]

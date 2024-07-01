@@ -1,37 +1,52 @@
-﻿using SAA.Models;
+﻿using System.Collections.Generic;
+using SAA.Models;
+using SAA.Services.impl;
 
-namespace SAA.Services;
-
-public class StudentService(IPersistenceService persistenceService) : IStudentService
+namespace SAA.Services
 {
-    public List<Student> GetAllStudents()
+    public class StudentService : IStudentService
     {
-        return persistenceService.GetAll<Student>("students");
-    }
+        private static readonly StudentService _instance = new StudentService(new PersistenceService());
+        private readonly IPersistenceService _persistenceService;
 
-    public Student GetStudentById(int studentId)
-    {
-        return persistenceService.GetById<Student>(studentId, "students");
-    }
+        // Constructor privado para evitar instanciación externa
+        private StudentService(IPersistenceService persistenceService)
+        {
+            _persistenceService = persistenceService;
+        }
 
-    public void AddStudent(Student student)
-    {
-        persistenceService.AddOrUpdate(student, "students");
-    }
+        // Propiedad estática para acceder a la instancia única
+        public static StudentService Instance => _instance;
 
-    public void UpdateStudent(Student student)
-    {
-        persistenceService.AddOrUpdate(student, "students");
-    }
+        public List<Student>? GetAllStudents()
+        {
+            return _persistenceService.GetAll<Student>("students");
+        }
 
-    public void DeleteStudent(int studentId)
-    {
-        persistenceService.Delete<Student>(studentId, "students");
-    }
+        public Student? GetStudentById(int studentId)
+        {
+            return _persistenceService.GetById<Student>(studentId, "students");
+        }
 
-    public bool IsDNIAvailable(string dni)
-    {
-        List<Student> students = GetAllStudents();
-        return !students.Any(s => s.DNI == dni && s.IsActive);
+        public void AddStudent(Student student)
+        {
+            _persistenceService.AddOrUpdate(student, "students");
+        }
+
+        public void UpdateStudent(Student student)
+        {
+            _persistenceService.AddOrUpdate(student, "students");
+        }
+
+        public void DeleteStudent(int studentId)
+        {
+            _persistenceService.Delete<Student>(studentId, "students");
+        }
+
+        public bool IsDniAvailable(string dni)
+        {
+            List<Student>? students = GetAllStudents();
+            return !students.Exists(s => s.Dni == dni && s.IsActive);
+        }
     }
 }
