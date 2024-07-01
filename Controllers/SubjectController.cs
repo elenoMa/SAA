@@ -145,24 +145,24 @@ public class SubjectController(ISubjectService subjectService)
 
     private void DisplaySubjects(List<Subject> subjects)
     {
-        const int tableWidth = 72; // Ancho total de la tabla, incluyendo los bordes
-
-        if (subjects.Count == 0)
-        {
-            Console.WriteLine("\n╔════════╦══════════════════════════════════════════════╗");
-            Console.WriteLine("║".PadRight(tableWidth - 1) + "║");
-            string centeredMessage = "No se encontraron materias."
-                .PadLeft((tableWidth + "No se encontraron materias.".Length) / 2).PadRight(tableWidth - 1);
-            Console.WriteLine($"║{centeredMessage}║");
-            Console.WriteLine("║".PadRight(tableWidth - 1) + "║");
-            Console.WriteLine("╚════════╩══════════════════════════════════════════════╝");
-            return;
-        }
-
+        const int tableWidth = 56; // Ancho total de la tabla, incluyendo los bordes
         // Encabezado de la tabla
         Console.WriteLine("\n╔════════╦═════════════════════════════════════╦════════╗");
         Console.WriteLine("║   ID   ║                  Nombre             ║ Activa ║");
-        Console.WriteLine("╠════════╬═════════════════════════════════════╬════════╗");
+        Console.WriteLine("╠════════╬═════════════════════════════════════╬════════╣");
+        
+        if (subjects.Count == 0)
+        {
+            Console.WriteLine("║".PadRight(tableWidth) + "║");
+            string centeredMessage = "No se encontraron materias."
+                .PadLeft((tableWidth + "No se encontraron materias.".Length) / 2).PadRight(tableWidth - 1);
+            Console.WriteLine($"║{centeredMessage}║");
+            Console.WriteLine("║".PadRight(tableWidth) + "║");
+            // Pie de la tabla
+            Console.WriteLine("╚════════╩═════════════════════════════════════╩════════╝");
+            return;
+        }
+        
         // Filas de datos
         foreach (var subject in subjects)
         {

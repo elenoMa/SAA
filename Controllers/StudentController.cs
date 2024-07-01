@@ -211,29 +211,51 @@ public class StudentController
 
     private DateTime ReadValidBirthDate()
     {
-        return ReadValidInput<DateTime>("Fecha de Nacimiento (dd/mm/yyyy)", input =>
+        return ReadValidInput<DateTime>("Fecha de Nacimiento (dd/MM/yyyy)", input =>
         {
             DateTime birthDate;
-            return DateTime.TryParseExact(input, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None,
-                out birthDate);
+            bool isValid = DateTime.TryParseExact(input, "dd/MM/yyyy", CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out birthDate);
+
+            if (!isValid || birthDate > DateTime.Today || (DateTime.Today - birthDate).TotalDays > 365 * 100)
+            {
+                Console.WriteLine("La fecha ingresada no es válida.");
+                return false;
+            }
+
+            return true;
         });
     }
 
     private T ReadValidInput<T>(string prompt, Func<string, bool> isValid)
     {
         const string promptStyle = "╚═══> ";
-        Console.Write($"{promptStyle}{prompt}: ");
         string input;
-        do
+
+        while (true)
         {
+            Console.Write($"{promptStyle}{prompt}: ");
             input = Console.ReadLine()?.Trim();
-            if (!isValid(input))
+
+            if (isValid(input))
+            {
+                try
+                {
+                    return (T)Convert.ChangeType(input, typeof(T));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: No se pudo convertir '{input}' a tipo {typeof(T).Name}. {ex.Message}");
+                }
+            }
+            else
+            {
                 Console.WriteLine(
                     $"Error: Valor ingresado no válido para '{prompt.TrimEnd(':')}'. Inténtelo nuevamente.");
-        } while (!isValid(input));
-
-        return (T)Convert.ChangeType(input, typeof(T));
+            }
+        }
     }
+
 
     private bool IsDNIValid(string dni)
     {
@@ -306,29 +328,30 @@ public class StudentController
 
     private void DisplayStudents(List<Student> students)
     {
-        const int tableWidth = 128; // Ancho total de la tabla, incluyendo los bordes
+        const int tableWidth = 138; // Ancho total de la tabla, incluyendo los bordes
 
         if (students.Count == 0)
         {
+            // Encabezado de la tabla
             Console.WriteLine(
-                "\n╔════════╦════════════════════════════════╦════════════════╦════════╦════════════════╦═════════════════════════════════════╗");
-            Console.WriteLine("║".PadRight(tableWidth - 1) + "║");
+                "\n╔════════╦════════════════════════════════╦════════════════╦════════╦════════════════╦════════════════════════════════════════════════════╗");
+            Console.WriteLine(
+                "║   ID   ║             Nombre             ║       DNI      ║ Activo ║ Fecha de Nac.  ║                      Dirección                     ║");
+            Console.WriteLine(
+                "╠════════╬════════════════════════════════╬════════════════╬════════╬════════════════╬════════════════════════════════════════════════════╣");
+
+            // Console.WriteLine(
+            Console.WriteLine("║".PadRight(tableWidth) + "║");
             string centeredMessage = "No se encontraron alumnos."
                 .PadLeft((tableWidth + "No se encontraron alumnos.".Length) / 2).PadRight(tableWidth - 1);
             Console.WriteLine($"║{centeredMessage}║");
-            Console.WriteLine("║".PadRight(tableWidth - 1) + "║");
+            Console.WriteLine("║".PadRight(tableWidth) + "║");
+            // Pie de la tabla
             Console.WriteLine(
-                "╚════════╩════════════════════════════════╩════════════════╩════════╩════════════════╩═════════════════════════════════════╝");
+                "╚════════╩════════════════════════════════╩════════════════╩════════╩════════════════╩════════════════════════════════════════════════════╝");
             return;
         }
 
-        // Encabezado de la tabla
-        Console.WriteLine(
-            "\n╔════════╦════════════════════════════════╦════════════════╦════════╦════════════════╦════════════════════════════════════════════════════╗");
-        Console.WriteLine(
-            "║   ID   ║             Nombre             ║       DNI      ║ Activo ║ Fecha de Nac.  ║                      Dirección              556       ║");
-        Console.WriteLine(
-            "╠════════╬════════════════════════════════╬════════════════╬════════╬════════════════╬════════════════════════════════════════════════════╣");
 
         // Filas de datos
         foreach (var student in students)
@@ -359,14 +382,17 @@ public class StudentController
 
 public class DuplicateDNIException : Exception
 {
+    // Constructor sin parámetros
     public DuplicateDNIException()
     {
     }
 
+    // Constructor que permite especificar un mensaje de error
     public DuplicateDNIException(string message) : base(message)
     {
     }
 
+    // Constructor que permite especificar un mensaje de error y una excepción interna
     public DuplicateDNIException(string message, Exception inner) : base(message, inner)
     {
     }

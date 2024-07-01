@@ -151,23 +151,26 @@ public class StudentRecordController(
 
     private void DisplayStudentRecords(List<StudentRecord> records)
     {
-        const int tableWidth = 108; // Ancho total de la tabla, incluyendo los bordes
-
-        if (records.Count == 0)
-        {
-            Console.WriteLine("\n╔════════╦════════════╦═════════════╦══════╦═════════╦════════════════════╗");
-            Console.WriteLine("║".PadRight(tableWidth - 1) + "║");
-            string centeredMessage = "No se encontraron registros académicos.".PadLeft((tableWidth + "No se encontraron registros académicos.".Length) / 2).PadRight(tableWidth - 1);
-            Console.WriteLine($"║{centeredMessage}║");
-            Console.WriteLine("║".PadRight(tableWidth - 1) + "║");
-            Console.WriteLine("╚════════╩════════════╩═════════════╩══════╩═════════╩════════════════════╝");
-            return;
-        }
+        const int tableWidth = 76; // Ancho total de la tabla, incluyendo los bordes
 
         // Encabezado de la tabla
         Console.WriteLine("\n╔════════╦════════════╦═════════════╦══════╦═══════════╦════════════════════╗");
         Console.WriteLine("║   ID   ║ Alumno ID  ║ Materia ID  ║ Nota ║   Estado  ║        Fecha       ║");
         Console.WriteLine("╠════════╬════════════╬═════════════╬══════╬═══════════╠════════════════════╣");
+        
+        if (records.Count == 0)
+        {
+
+            Console.WriteLine("║".PadRight(tableWidth ) + "║");
+            string centeredMessage = "No se encontraron registros académicos.".PadLeft((tableWidth + "No se encontraron registros académicos.".Length) / 2).PadRight(tableWidth - 1);
+            Console.WriteLine($"║{centeredMessage}║");
+            Console.WriteLine("║".PadRight(tableWidth ) + "║");
+            Console.WriteLine("╚════════╩════════════╩═════════════╩══════╩═══════════╩════════════════════╝");
+
+            return;
+        }
+
+
 
         // Filas de datos
         foreach (var record in records)

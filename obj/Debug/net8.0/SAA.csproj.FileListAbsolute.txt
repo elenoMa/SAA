@@ -12,3 +12,4 @@ C:\Users\Mariano\RiderProjects\SAA\SAA\obj\Debug\net8.0\refint\SAA.dll
 C:\Users\Mariano\RiderProjects\SAA\SAA\obj\Debug\net8.0\SAA.pdb
 C:\Users\Mariano\RiderProjects\SAA\SAA\obj\Debug\net8.0\SAA.genruntimeconfig.cache
 C:\Users\Mariano\RiderProjects\SAA\SAA\obj\Debug\net8.0\ref\SAA.dll
+C:\Users\Mariano\RiderProjects\SAA\SAA\obj\Debug\net8.0\SAA.sourcelink.json

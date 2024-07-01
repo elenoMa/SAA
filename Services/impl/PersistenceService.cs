@@ -1,134 +1,150 @@
-﻿using System.Text.Json;
-using SAA.Services;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 
-public class PersistenceService : IPersistenceService
+namespace SAA.Services
 {
-    private readonly string _basePath;
-
-    public PersistenceService()
+    public class PersistenceService : IPersistenceService
     {
-        // Obtener la ruta del directorio base del proyecto
-        _basePath = GetBasePath();
-    }
+        private readonly string _basePath;
+        private static readonly Lazy<PersistenceService> instance = new Lazy<PersistenceService>(() => new PersistenceService());
 
-    public List<T> GetAll<T>(string resourceName)
-    {
-        var filePath = GetFilePath(resourceName);
-        var entities = new List<T>();
+        public static PersistenceService Instance => instance.Value;
 
-        try
+        public PersistenceService()
         {
-            using (var reader = new StreamReader(filePath))
+            _basePath = GetBasePath();
+        }
+
+        public List<T> GetAll<T>(string resourceName)
+        {
+            var filePath = GetFilePath(resourceName);
+            var entities = new List<T>();
+
+            try
             {
-                var json = reader.ReadToEnd();
-                entities = JsonSerializer.Deserialize<List<T>>(json);
+                using (var reader = new StreamReader(filePath))
+                {
+                    var json = reader.ReadToEnd();
+                    entities = JsonSerializer.Deserialize<List<T>>(json);
+                }
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine($"Error al deserializar el archivo JSON: {ex.Message}");
+                throw;
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Error de E/S al intentar leer el archivo: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error inesperado: {ex.Message}");
+                throw;
+            }
+
+            return entities;
+        }
+
+        public T GetById<T>(int id, string resourceName)
+        {
+            var entities = GetAll<T>(resourceName);
+            return entities.FirstOrDefault(e => GetIdFromEntity(e).Equals(id));
+        }
+
+        public void AddOrUpdate<T>(T entity, string resourceName)
+        {
+            var filePath = GetFilePath(resourceName);
+            var entities = GetAll<T>(resourceName);
+
+            var entityId = GetIdFromEntity(entity);
+
+            if (entityId == 0)
+            {
+                entityId = entities.Count > 0 ? entities.Max(e => GetIdFromEntity(e)) + 1 : 1;
+                SetIdForEntity(entity, entityId);
+                entities.Add(entity);
+            }
+            else
+            {
+                var existingEntity = entities.FirstOrDefault(e => GetIdFromEntity(e).Equals(entityId));
+                if (existingEntity != null)
+                {
+                    entities[entities.IndexOf(existingEntity)] = entity;
+                }
+            }
+
+            SaveEntities(entities, filePath);
+        }
+
+        public void Delete<T>(int id, string resourceName)
+        {
+            var filePath = GetFilePath(resourceName);
+            var entities = GetAll<T>(resourceName);
+            entities.RemoveAll(e => GetIdFromEntity(e).Equals(id));
+            SaveEntities(entities, filePath);
+        }
+
+        private string GetBasePath()
+        {
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var basePath = Directory.GetParent(currentDirectory).Parent.Parent.FullName;
+            basePath = Path.Combine(basePath, "Resources");
+            return basePath;
+        }
+
+        private string GetFilePath(string resourceName)
+        {
+            return Path.Combine(_basePath, $"{resourceName.ToLower()}.json");
+        }
+
+        private void SaveEntities<T>(List<T> entities, string filePath)
+        {
+            try
+            {
+                using (var writer = new StreamWriter(filePath, false))
+                {
+                    var json = JsonSerializer.Serialize(entities, new JsonSerializerOptions { WriteIndented = true });
+                    writer.Write(json);
+                }
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Error de E/S al intentar escribir en el archivo: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error inesperado al intentar escribir en el archivo: {ex.Message}");
+                throw;
             }
         }
-        catch (JsonException ex)
+
+        private int GetIdFromEntity<T>(T entity)
         {
-            Console.WriteLine($"Error al deserializar el archivo JSON: {ex.Message}");
-            // Puedes agregar más lógica de manejo de excepciones aquí, como registrar el error o lanzar una excepción personalizada.
-        }
-        catch (IOException ex)
-        {
-            Console.WriteLine($"Error de E/S al intentar leer el archivo: {ex.Message}");
-            // Manejo de excepciones específicas de E/S
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error inesperado: {ex.Message}");
-            // Otros tipos de excepciones no controladas
-        }
-
-        return entities;
-    }
-
-    public T GetById<T>(int id, string resourceName)
-    {
-        var filePath = GetFilePath(resourceName);
-        var entities = GetAll<T>(resourceName);
-        return entities.Find(e => GetIdFromEntity(e).Equals(id));
-    }
-
-    public void AddOrUpdate<T>(T entity, string resourceName)
-    {
-        var filePath = GetFilePath(resourceName);
-        var entities = GetAll<T>(resourceName);
-
-        var entityId = Convert.ToInt32(entity.GetType().GetProperty("Id").GetValue(entity));
-
-        if (entityId == 0)
-        {
-            // Assign new Id
-            var maxId = entities.Count > 0 ? entities.Max(e => GetIdFromEntity(e)) : 0;
-            entityId = maxId + 1;
-            entity.GetType().GetProperty("Id").SetValue(entity, entityId);
-            entities.Add(entity);
-        }
-        else
-        {
-            // Update existing entity
-            var index = entities.FindIndex(e => GetIdFromEntity(e).Equals(entityId));
-            if (index != -1) entities[index] = entity;
-        }
-
-        SaveEntities(entities, filePath);
-    }
-
-    public void Delete<T>(int id, string resourceName)
-    {
-        var filePath = GetFilePath(resourceName);
-        var entities = GetAll<T>(resourceName);
-        entities.RemoveAll(e => GetIdFromEntity(e).Equals(id));
-        SaveEntities(entities, filePath);
-    }
-
-    private string GetBasePath()
-    {
-        // Obtener el directorio actual de ejecución del programa
-        var currentDirectory = Directory.GetCurrentDirectory();
-
-        // Subir tres niveles para llegar a la raíz del proyecto
-        var basePath = Directory.GetParent(currentDirectory).Parent.Parent.FullName;
-
-        // Asegurarse de que la ruta use el separador correcto para el sistema operativo
-        basePath = Path.Combine(basePath, "Resources");
-
-        return basePath;
-    }
-
-    // Helper method to get the file path for a specific resource
-    private string GetFilePath(string resourceName)
-    {
-        return Path.Combine(_basePath, $"{resourceName.ToLower()}.json");
-    }
-
-    // Helper method to save entities back to JSON file using StreamWriter
-    private void SaveEntities<T>(List<T> entities, string filePath)
-    {
-        try
-        {
-            using (var writer = new StreamWriter(filePath, false))
+            var idProp = entity.GetType().GetProperty("Id");
+            if (idProp != null && idProp.PropertyType == typeof(int))
             {
-                var json = JsonSerializer.Serialize(entities, new JsonSerializerOptions { WriteIndented = true });
-                writer.Write(json);
+                return (int)idProp.GetValue(entity);
+            }
+            throw new InvalidOperationException("La entidad no tiene una propiedad 'Id' válida o de tipo correcto.");
+        }
+
+        private void SetIdForEntity<T>(T entity, int id)
+        {
+            var idProp = entity.GetType().GetProperty("Id");
+            if (idProp != null && idProp.PropertyType == typeof(int))
+            {
+                idProp.SetValue(entity, id);
+            }
+            else
+            {
+                throw new InvalidOperationException("La entidad no tiene una propiedad 'Id' válida o de tipo correcto.");
             }
         }
-        catch (IOException ex)
-        {
-            Console.WriteLine($"Error de E/S al intentar escribir en el archivo: {ex.Message}");
-            // Manejar la excepción de E/S específicamente
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error inesperado al intentar escribir en el archivo: {ex.Message}");
-            // Otros tipos de excepciones no controladas
-        }
-    }
-
-    // Helper method to get the Id from an entity (assuming Id property is "Id")
-    private int GetIdFromEntity<T>(T entity)
-    {
-        return Convert.ToInt32(entity.GetType().GetProperty("Id").GetValue(entity));
     }
 }

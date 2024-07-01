@@ -1,31 +1,45 @@
-﻿using SAA.Models;
+﻿using System.Collections.Generic;
+using SAA.Models;
 
-namespace SAA.Services;
-
-public class SubjectService(IPersistenceService persistenceService) : ISubjectService
+namespace SAA.Services
 {
-    public List<Subject> GetAllSubjects()
+    public class SubjectService : ISubjectService
     {
-        return persistenceService.GetAll<Subject>("subjects");
-    }
+        private static readonly SubjectService _instance = new SubjectService(new PersistenceService());
+        private readonly IPersistenceService _persistenceService;
 
-    public Subject GetSubjectById(int subjectId)
-    {
-        return persistenceService.GetById<Subject>(subjectId, "subjects");
-    }
+        // Constructor privado para evitar instanciación externa
+        private SubjectService(IPersistenceService persistenceService)
+        {
+            _persistenceService = persistenceService;
+        }
 
-    public void AddSubject(Subject subject)
-    {
-        persistenceService.AddOrUpdate(subject, "subjects");
-    }
+        // Propiedad estática para acceder a la instancia única
+        public static SubjectService Instance => _instance;
 
-    public void UpdateSubject(Subject subject)
-    {
-        persistenceService.AddOrUpdate(subject, "subjects");
-    }
+        public List<Subject> GetAllSubjects()
+        {
+            return _persistenceService.GetAll<Subject>("subjects");
+        }
 
-    public void DeleteSubject(int subjectId)
-    {
-        persistenceService.Delete<Subject>(subjectId, "subjects");
+        public Subject GetSubjectById(int subjectId)
+        {
+            return _persistenceService.GetById<Subject>(subjectId, "subjects");
+        }
+
+        public void AddSubject(Subject subject)
+        {
+            _persistenceService.AddOrUpdate(subject, "subjects");
+        }
+
+        public void UpdateSubject(Subject subject)
+        {
+            _persistenceService.AddOrUpdate(subject, "subjects");
+        }
+
+        public void DeleteSubject(int subjectId)
+        {
+            _persistenceService.Delete<Subject>(subjectId, "subjects");
+        }
     }
 }
