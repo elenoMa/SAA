@@ -54,7 +54,7 @@ public class StudentController
             Console.WriteLine("Ocurrió un error al mostrar los alumnos inactivos.");
         }
     }
-    
+
     public void AddStudent()
     {
         try
@@ -112,7 +112,7 @@ public class StudentController
             }
 
             Console.WriteLine(
-                $"Alumno seleccionado: {studentToUpdate.FirstName} {studentToUpdate.LastName} (DNI: {studentToUpdate.Dni})");
+                $"Alumno seleccionado: {studentToUpdate.FirstName} {studentToUpdate.LastName} (DNI: {studentToUpdate.DNI})");
 
             var newFirstName = ReadValidInput<string>("Nuevo Nombre", input => !string.IsNullOrEmpty(input));
             if (!string.IsNullOrEmpty(newFirstName)) studentToUpdate.FirstName = newFirstName;
@@ -121,7 +121,7 @@ public class StudentController
             if (!string.IsNullOrEmpty(newLastName)) studentToUpdate.LastName = newLastName;
 
             var newDni = ReadValidInput<string>("Nuevo DNI (7 u 8 dígitos numéricos)", IsDniValid);
-            if (!string.IsNullOrEmpty(newDni) && newDni != studentToUpdate.Dni)
+            if (!string.IsNullOrEmpty(newDni) && newDni != studentToUpdate.DNI)
                 ValidateAndUpdateDni(studentToUpdate, newDni);
 
             var newBirthDate = ReadValidInput<DateTime>("Nueva Fecha de Nacimiento (dd/mm/yyyy)", input =>
@@ -191,7 +191,7 @@ public class StudentController
         {
             FirstName = firstName,
             LastName = lastName,
-            Dni = dni,
+            DNI = dni,
             DateOfBirth = birthDate,
             Address = address,
             IsActive = true
@@ -279,7 +279,7 @@ public class StudentController
 
     private void ValidateAndUpdateDni(Student studentToUpdate, string newDni)
     {
-        var existingStudent = _studentService.GetAllStudents().Find(s => s.Dni == newDni);
+        var existingStudent = _studentService.GetAllStudents().Find(s => s.DNI == newDni);
         if (existingStudent != null && existingStudent.Id != studentToUpdate.Id)
         {
             if (existingStudent.IsActive)
@@ -302,7 +302,7 @@ public class StudentController
             return;
         }
 
-        studentToUpdate.Dni = newDni;
+        studentToUpdate.DNI = newDni;
     }
 
     private void UpdateStudentStatus(Student studentToUpdate)
@@ -325,13 +325,8 @@ public class StudentController
             Console.WriteLine("No se realizaron cambios en el estado del alumno.");
         }
     }
-<<<<<<< Updated upstream
 
     private void DisplayStudents(List<Student>? students)
-=======
-    
-    private void DisplayStudents(List<Student> students)
->>>>>>> Stashed changes
     {
         const int tableWidth = 138; // Ancho total de la tabla, incluyendo los bordes
 
@@ -342,10 +337,7 @@ public class StudentController
             "║   ID   ║             Nombre             ║       DNI      ║ Activo ║ Fecha de Nac.  ║                      Dirección                     ║");
         Console.WriteLine(
             "╠════════╬════════════════════════════════╬════════════════╬════════╬════════════════╬════════════════════════════════════════════════════╣");
-<<<<<<< Updated upstream
         
-=======
->>>>>>> Stashed changes
         if (students.Count == 0)
         {
             // Console.WriteLine(
@@ -367,7 +359,7 @@ public class StudentController
             string id = student.Id.ToString().PadRight(6);
             string name =
                 (student.FirstName + " " + student.LastName).PadRight(30); // Aumentar el espacio para el nombre
-            string dni = student.Dni.PadRight(14);
+            string dni = student.DNI.PadRight(14);
             string isActive = student.IsActive ? "Sí" : "No";
             string dateOfBirth = student.DateOfBirth.ToShortDateString().PadRight(14); // Formatear la fecha
             string address = student.Address.PadRight(50); // Aumentar el espacio para la dirección
