@@ -1,12 +1,12 @@
 # Proyecto Programación I - TUP
 
 - Alumno: Mariano Eleno
-- Profesor: xxx
-- Ayudante: sss
+- Profesor: Sebastián Zunini
+- Ayudantes: Joel Partida y Damian Ene
 
 ## Sistema de Gestión Académico (SAA)
 
-El archivo `Program.cs` es el punto de entrada y control principal del Sistema de Gestión Académico (SAA), una aplicación de consola en C# para la gestión de alumnos, materias y registros académicos.
+El Sistema de Gestión Académico (SAA) es una aplicación de consola en C# diseñada para la gestión de alumnos, materias y registros académicos.
 
 ### Funcionalidades Principales
 
@@ -42,7 +42,7 @@ El programa utiliza menús interactivos para facilitar la navegación y operacio
 - **Menú Principal**: Permite seleccionar entre las opciones de gestión de alumnos, materias y registros.
 - **Menús Específicos**: Cada gestión (alumnos, materias, registros) tiene su propio menú con opciones específicas para operar sobre los datos.
 
-### Ejecución
+### Instalación y Ejecución
 
 Para ejecutar la aplicación:
 
@@ -50,4 +50,28 @@ Para ejecutar la aplicación:
 2. Abre el proyecto en tu entorno de desarrollo preferido.
 3. Compila y ejecuta el proyecto desde `Program.cs`.
 
-Este `Readme.md` proporciona una descripción detallada de las funcionalidades principales que ofrece `Program.cs` en el contexto del Sistema de Gestión Académico (SAA). Puedes ajustar y expandir esta información según sea necesario para reflejar completamente las capacidades y características de tu proyecto.**
+### Creación de archivo .exe
+
+Al ejecutar el comando `dotnet publish -c Release` desde el directorio principal del proyecto, se generará un archivo .exe dentro de `./SAA/bin/Release/net8.0/SAA.exe`, con el cual podrás ejecutar el programa sin necesidad de utilizar un IDE.
+
+## Características Principales del Proyecto
+
+- **Gestión de Estudiantes:** Registro, consulta, actualización y eliminación de datos de estudiantes.
+- **Gestión de Materias:** Registro, consulta, actualización y eliminación de datos de materias.
+- **Gestión de Registros Académicos:** Registro y consulta de registros académicos de estudiantes por materia y estudiante.
+- **Persistencia de Datos:** Utilización de archivos JSON para almacenamiento de datos.
+- **Patrón Singleton:** Implementación del patrón Singleton en los servicios de persistencia.
+
+## Estructura del Proyecto
+
+El proyecto está organizado en distintos componentes:
+
+- **Modelos (`SAA.Models`):** Define las entidades como `Student`, `Subject` y `StudentRecord`.
+- **Servicios (`SAA.Services`):** Contiene interfaces e implementaciones para la lógica de negocio y persistencia de datos.
+- **Controladores:** Implementa la lógica de la aplicación, manipulando datos y gestionando interacciones.
+- **Entrada Principal (`Program.cs`):** Punto de entrada y control principal de la aplicación.
+
+## Requisitos del Sistema
+
+- **.NET Core SDK:** Versión 3.1 o superior.
+- **Visual Studio / Visual Studio Code:** Para la edición y ejecución del proyecto.

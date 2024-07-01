@@ -46,7 +46,7 @@ namespace SAA.Services
         public bool IsDniAvailable(string dni)
         {
             List<Student>? students = GetAllStudents();
-            return !students.Exists(s => s.Dni == dni && s.IsActive);
+            return !students.Exists(s => s.DNI == dni && s.IsActive);
         }
     }
 }

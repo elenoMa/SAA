@@ -207,7 +207,7 @@ namespace SAA
         private static void ShowStudentRecordMenu()
         {
             Console.WriteLine("╔══════════════════════════════════════════╗");
-            Console.WriteLine("║ Gestión de Notas de Alumnos              ║");
+            Console.WriteLine("║       Gestión de Notas de Alumnos        ║");
             Console.WriteLine("╠══════════════════════════════════════════╣");
             Console.WriteLine("║ [1] Mostrar todos los registros          ║");
             Console.WriteLine("║ [2] Mostrar registros de alumno por id   ║");
@@ -222,44 +222,44 @@ namespace SAA
 
         private static void ShowSubjectMenu()
         {
-            Console.WriteLine("╔══════════════════════════════════════╗");
-            Console.WriteLine("║          Gestión de Materias         ║");
-            Console.WriteLine("╠══════════════════════════════════════╣");
-            Console.WriteLine("║ [1] Mostrar todas las materias       ║");
-            Console.WriteLine("║ [2] Alta de materia                  ║");
-            Console.WriteLine("║ [3] Modificación de materia          ║");
-            Console.WriteLine("║ [4] Baja de materia                  ║");
-            Console.WriteLine("║ [5] Volver al menú principal         ║");
-            Console.WriteLine("╚══════════════════════════════════════╝");
+            Console.WriteLine("╔══════════════════════════════════════════╗");
+            Console.WriteLine("║           Gestión de Materias            ║");
+            Console.WriteLine("╠══════════════════════════════════════════╣");
+            Console.WriteLine("║ [1] Mostrar todas las materias           ║");
+            Console.WriteLine("║ [2] Alta de materia                      ║");
+            Console.WriteLine("║ [3] Modificación de materia              ║");
+            Console.WriteLine("║ [4] Baja de materia                      ║");
+            Console.WriteLine("║ [5] Volver al menú principal             ║");
+            Console.WriteLine("╚══════════════════════════════════════════╝");
             Console.Write("Seleccione una opción: ");
         }
 
         private static void ShowStudentMenu()
         {
-            Console.WriteLine("╔══════════════════════════════════════╗");
-            Console.WriteLine("║           Gestión de Alumnos         ║");
-            Console.WriteLine("╠══════════════════════════════════════╣");
-            Console.WriteLine("║ [1] Mostrar todos los alumnos        ║");
-            Console.WriteLine("║ [2] Mostrar alumnos activos          ║");
-            Console.WriteLine("║ [3] Mostrar alumnos inactivos        ║");
-            Console.WriteLine("║ [4] Alta de alumno                   ║");
-            Console.WriteLine("║ [5] Modificación de alumno           ║");
-            Console.WriteLine("║ [6] Baja de alumno                   ║");
-            Console.WriteLine("║ [7] Volver al menú principal         ║");
-            Console.WriteLine("╚══════════════════════════════════════╝");
+            Console.WriteLine("╔══════════════════════════════════════════╗");
+            Console.WriteLine("║            Gestión de Alumnos            ║");
+            Console.WriteLine("╠══════════════════════════════════════════╣");
+            Console.WriteLine("║ [1] Mostrar todos los alumnos            ║");
+            Console.WriteLine("║ [2] Mostrar alumnos activos              ║");
+            Console.WriteLine("║ [3] Mostrar alumnos inactivos            ║");
+            Console.WriteLine("║ [4] Alta de alumno                       ║");
+            Console.WriteLine("║ [5] Modificación de alumno               ║");
+            Console.WriteLine("║ [6] Baja de alumno                       ║");
+            Console.WriteLine("║ [7] Volver al menú principal             ║");
+            Console.WriteLine("╚══════════════════════════════════════════╝");
             Console.Write("Seleccione una opción: ");
         }
 
         private static void ShowMainMenu()
         {
-            Console.WriteLine("╔══════════════════════════════════════╗");
-            Console.WriteLine("║            Menú Principal            ║");
-            Console.WriteLine("╠══════════════════════════════════════╣");
-            Console.WriteLine("║ [1] Gestión de Alumnos               ║");
-            Console.WriteLine("║ [2] Gestión de Materias              ║");
-            Console.WriteLine("║ [3] Gestión de Registros de Alumnos  ║");
-            Console.WriteLine("║ [4] Salir                            ║");
-            Console.WriteLine("╚══════════════════════════════════════╝");
+            Console.WriteLine("╔══════════════════════════════════════════╗");
+            Console.WriteLine("║              Menú Principal              ║");
+            Console.WriteLine("╠══════════════════════════════════════════╣");
+            Console.WriteLine("║ [1] Gestión de Alumnos                   ║");
+            Console.WriteLine("║ [2] Gestión de Materias                  ║");
+            Console.WriteLine("║ [3] Gestión de Registros de Alumnos      ║");
+            Console.WriteLine("║ [4] Salir                                ║");
+            Console.WriteLine("╚══════════════════════════════════════════╝");
             Console.Write("Seleccione una opción: ");
         }
 

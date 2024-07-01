@@ -8,14 +8,5 @@
     "Id": 2,
     "Name": "Programacion I",
     "IsActive": true
-  },
-  {
-    "Id": 3,
-<<<<<<< Updated upstream
-    "Name": "Fisica",
-=======
-    "Name": "Programacion II",
->>>>>>> Stashed changes
-    "IsActive": true
   }
 ]
