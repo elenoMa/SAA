@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
+﻿using System.Text.Json;
 
-namespace SAA.Services
+namespace SAA.Services.impl
 {
     public class PersistenceService : IPersistenceService
     {
@@ -18,10 +14,11 @@ namespace SAA.Services
             _basePath = GetBasePath();
         }
 
-        public List<T> GetAll<T>(string resourceName)
+        public List<T>? GetAll<T>(string resourceName)
         {
             var filePath = GetFilePath(resourceName);
-            var entities = new List<T>();
+            List<T>? entities;
+            new List<T>();
 
             try
             {
@@ -50,10 +47,10 @@ namespace SAA.Services
             return entities;
         }
 
-        public T GetById<T>(int id, string resourceName)
+        public T? GetById<T>(int id, string resourceName)
         {
             var entities = GetAll<T>(resourceName);
-            return entities.FirstOrDefault(e => GetIdFromEntity(e).Equals(id));
+            return (entities ?? throw new InvalidOperationException()).FirstOrDefault(e => GetIdFromEntity(e).Equals(id));
         }
 
         public void AddOrUpdate<T>(T entity, string resourceName)
@@ -65,13 +62,13 @@ namespace SAA.Services
 
             if (entityId == 0)
             {
-                entityId = entities.Count > 0 ? entities.Max(e => GetIdFromEntity(e)) + 1 : 1;
+                entityId = entities != null && entities.Count > 0 ? entities.Max(e => GetIdFromEntity(e)) + 1 : 1;
                 SetIdForEntity(entity, entityId);
-                entities.Add(entity);
+                entities?.Add(entity);
             }
             else
             {
-                var existingEntity = entities.FirstOrDefault(e => GetIdFromEntity(e).Equals(entityId));
+                var existingEntity = (entities ?? throw new InvalidOperationException()).FirstOrDefault(e => GetIdFromEntity(e).Equals(entityId));
                 if (existingEntity != null)
                 {
                     entities[entities.IndexOf(existingEntity)] = entity;
@@ -85,16 +82,24 @@ namespace SAA.Services
         {
             var filePath = GetFilePath(resourceName);
             var entities = GetAll<T>(resourceName);
-            entities.RemoveAll(e => GetIdFromEntity(e).Equals(id));
-            SaveEntities(entities, filePath);
+            if (entities != null)
+            {
+                entities.RemoveAll(e => GetIdFromEntity(e).Equals(id));
+                SaveEntities(entities, filePath);
+            }
         }
 
         private string GetBasePath()
         {
             var currentDirectory = Directory.GetCurrentDirectory();
-            var basePath = Directory.GetParent(currentDirectory).Parent.Parent.FullName;
-            basePath = Path.Combine(basePath, "Resources");
-            return basePath;
+            var basePath = Directory.GetParent(currentDirectory)?.Parent?.Parent?.FullName;
+            if (basePath != null)
+            {
+                basePath = Path.Combine(basePath, "Resources");
+                return basePath;
+            }
+
+            throw new InvalidOperationException();
         }
 
         private string GetFilePath(string resourceName)
@@ -102,7 +107,7 @@ namespace SAA.Services
             return Path.Combine(_basePath, $"{resourceName.ToLower()}.json");
         }
 
-        private void SaveEntities<T>(List<T> entities, string filePath)
+        private void SaveEntities<T>(List<T>? entities, string filePath)
         {
             try
             {
@@ -126,17 +131,21 @@ namespace SAA.Services
 
         private int GetIdFromEntity<T>(T entity)
         {
-            var idProp = entity.GetType().GetProperty("Id");
-            if (idProp != null && idProp.PropertyType == typeof(int))
+            if (entity != null)
             {
-                return (int)idProp.GetValue(entity);
+                var idProp = entity.GetType().GetProperty("Id");
+                if (idProp != null && idProp.PropertyType == typeof(int))
+                {
+                    return (int)(idProp.GetValue(entity) ?? throw new InvalidOperationException());
+                }
             }
+
             throw new InvalidOperationException("La entidad no tiene una propiedad 'Id' válida o de tipo correcto.");
         }
 
         private void SetIdForEntity<T>(T entity, int id)
         {
-            var idProp = entity.GetType().GetProperty("Id");
+            var idProp = entity?.GetType().GetProperty("Id");
             if (idProp != null && idProp.PropertyType == typeof(int))
             {
                 idProp.SetValue(entity, id);

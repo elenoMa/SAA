@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SAA.Models;
+using SAA.Services.impl;
 
 namespace SAA.Services
 {
@@ -17,12 +18,12 @@ namespace SAA.Services
         // Propiedad estática para acceder a la instancia única
         public static SubjectService Instance => _instance;
 
-        public List<Subject> GetAllSubjects()
+        public List<Subject>? GetAllSubjects()
         {
             return _persistenceService.GetAll<Subject>("subjects");
         }
 
-        public Subject GetSubjectById(int subjectId)
+        public Subject? GetSubjectById(int subjectId)
         {
             return _persistenceService.GetById<Subject>(subjectId, "subjects");
         }

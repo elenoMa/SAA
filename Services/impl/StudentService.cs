@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SAA.Models;
+using SAA.Services.impl;
 
 namespace SAA.Services
 {
@@ -17,12 +18,12 @@ namespace SAA.Services
         // Propiedad estática para acceder a la instancia única
         public static StudentService Instance => _instance;
 
-        public List<Student> GetAllStudents()
+        public List<Student>? GetAllStudents()
         {
             return _persistenceService.GetAll<Student>("students");
         }
 
-        public Student GetStudentById(int studentId)
+        public Student? GetStudentById(int studentId)
         {
             return _persistenceService.GetById<Student>(studentId, "students");
         }
@@ -42,10 +43,10 @@ namespace SAA.Services
             _persistenceService.Delete<Student>(studentId, "students");
         }
 
-        public bool IsDNIAvailable(string dni)
+        public bool IsDniAvailable(string dni)
         {
-            List<Student> students = GetAllStudents();
-            return !students.Exists(s => s.DNI == dni && s.IsActive);
+            List<Student>? students = GetAllStudents();
+            return !students.Exists(s => s.Dni == dni && s.IsActive);
         }
     }
 }
