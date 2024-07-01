@@ -8,4 +8,5 @@ public class StudentRecord
     public string Status { get; set; }
     public decimal Grade { get; set; }
     public DateTime Date { get; set; }
+    
 }
