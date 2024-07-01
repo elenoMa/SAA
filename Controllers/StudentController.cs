@@ -54,7 +54,7 @@ public class StudentController
             Console.WriteLine("Ocurrió un error al mostrar los alumnos inactivos.");
         }
     }
-
+    
     public void AddStudent()
     {
         try
@@ -325,8 +325,13 @@ public class StudentController
             Console.WriteLine("No se realizaron cambios en el estado del alumno.");
         }
     }
+<<<<<<< Updated upstream
 
     private void DisplayStudents(List<Student>? students)
+=======
+    
+    private void DisplayStudents(List<Student> students)
+>>>>>>> Stashed changes
     {
         const int tableWidth = 138; // Ancho total de la tabla, incluyendo los bordes
 
@@ -337,7 +342,10 @@ public class StudentController
             "║   ID   ║             Nombre             ║       DNI      ║ Activo ║ Fecha de Nac.  ║                      Dirección                     ║");
         Console.WriteLine(
             "╠════════╬════════════════════════════════╬════════════════╬════════╬════════════════╬════════════════════════════════════════════════════╣");
+<<<<<<< Updated upstream
         
+=======
+>>>>>>> Stashed changes
         if (students.Count == 0)
         {
             // Console.WriteLine(
