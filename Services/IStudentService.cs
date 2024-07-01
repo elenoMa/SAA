@@ -4,10 +4,10 @@ namespace SAA.Services;
 
 public interface IStudentService
 {
-    List<Student> GetAllStudents();
-    Student GetStudentById(int studentId);
+    List<Student>? GetAllStudents();
+    Student? GetStudentById(int studentId);
     void AddStudent(Student student);
     void UpdateStudent(Student student);
     void DeleteStudent(int studentId);
-    bool IsDNIAvailable(string dni);
+    bool IsDniAvailable(string dni);
 }

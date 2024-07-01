@@ -1,6 +1,8 @@
 ﻿using SAA.Models;
 using SAA.Services;
 
+namespace SAA.Controllers;
+
 public class SubjectController(ISubjectService subjectService)
 {
     public void ShowAllSubjects()
@@ -97,7 +99,7 @@ public class SubjectController(ISubjectService subjectService)
 
             Console.WriteLine($"¿Está seguro que desea dar de baja la materia {subjectToDelete.Name}? (s/n): ");
             var confirmation = Console.ReadLine();
-            if (confirmation.ToLower() == "s")
+            if (confirmation != null && confirmation.Equals("s", StringComparison.CurrentCultureIgnoreCase))
             {
                 subjectService.DeleteSubject(subjectId);
                 Console.WriteLine("Materia dada de baja correctamente.");
@@ -134,16 +136,16 @@ public class SubjectController(ISubjectService subjectService)
         do
         {
             Console.Write(prompt);
-            input = Console.ReadLine()?.Trim();
-            if (!isValid(input))
+            input = Console.ReadLine()?.Trim() ?? throw new InvalidOperationException();
+            if (input != null && !isValid(input))
                 Console.WriteLine(
                     $"Error: Valor ingresado no válido para '{prompt.TrimEnd(':')}'. Inténtelo nuevamente.");
-        } while (!isValid(input));
+        } while (input != null && !isValid(input));
 
-        return (T)Convert.ChangeType(input, typeof(T));
+        return (T)Convert.ChangeType(input, typeof(T))! ?? throw new InvalidOperationException();
     }
 
-    private void DisplaySubjects(List<Subject> subjects)
+    private void DisplaySubjects(List<Subject>? subjects)
     {
         const int tableWidth = 56; // Ancho total de la tabla, incluyendo los bordes
         // Encabezado de la tabla

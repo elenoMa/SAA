@@ -4,10 +4,13 @@ namespace SAA.Models;
 
 public class Student
 {
-    public Student()
-    {
-        // Constructor por defecto
-    }
+    public int Id { get; }
+    public string FirstName { get; }
+    public string LastName { get; }
+    public string Dni { get; set; }
+    public DateTime DateOfBirth { get; set; }
+    public string Address { get; set; }
+    public bool IsActive { get; set; }
 
     public Student(int id, string firstName, string lastName, string dni, DateTime dateOfBirth, string address,
         bool isActive)
@@ -15,26 +18,18 @@ public class Student
         Id = id;
         FirstName = firstName;
         LastName = lastName;
-        DNI = dni;
+        Dni = dni;
         DateOfBirth = dateOfBirth;
         Address = address;
         IsActive = isActive;
     }
-
-    public int Id { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string DNI { get; set; }
-    public DateTime DateOfBirth { get; set; }
-    public string Address { get; set; }
-    public bool IsActive { get; set; }
 
     public override string ToString()
     {
         return JsonSerializer.Serialize(this);
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj == null || GetType() != obj.GetType()) return false;
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SAA.Models;
+using SAA.Services.impl;
 
 namespace SAA.Services
 {
@@ -20,12 +21,12 @@ namespace SAA.Services
         // Propiedad estática para acceder a la instancia única
         public static StudentRecordService Instance => _instance;
 
-        public List<StudentRecord> GetAllStudentRecords()
+        public List<StudentRecord>? GetAllStudentRecords()
         {
             return _persistenceService.GetAll<StudentRecord>(_resourceName);
         }
 
-        public StudentRecord GetStudentRecordById(int id)
+        public StudentRecord? GetStudentRecordById(int id)
         {
             return _persistenceService.GetById<StudentRecord>(id, _resourceName);
         }
@@ -45,15 +46,15 @@ namespace SAA.Services
             _persistenceService.Delete<StudentRecord>(id, _resourceName);
         }
 
-        public List<StudentRecord> GetStudentRecordsByStudentId(int studentId)
+        public List<StudentRecord>? GetStudentRecordsByStudentId(int studentId)
         {
-            List<StudentRecord> allRecords = GetAllStudentRecords();
+            List<StudentRecord>? allRecords = GetAllStudentRecords();
             return allRecords.Where(r => r.StudentId == studentId).ToList();
         }
 
-        public List<StudentRecord> GetStudentRecordsBySubjectId(int subjectId)
+        public List<StudentRecord>? GetStudentRecordsBySubjectId(int subjectId)
         {
-            List<StudentRecord> allRecords = GetAllStudentRecords();
+            List<StudentRecord>? allRecords = GetAllStudentRecords();
             return allRecords.Where(r => r.SubjectId == subjectId).ToList();
         }
     }

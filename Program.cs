@@ -95,7 +95,7 @@ namespace SAA
                             break;
                     }
                 }
-                catch (DuplicateDNIException ex)
+                catch (DuplicateDniException ex)
                 {
                     Console.WriteLine($"Error: {ex.Message}");
                 }
