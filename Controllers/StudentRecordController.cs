@@ -57,6 +57,28 @@ public class StudentRecordController(
         }
     }
 
+    public void ShowStudentRecordsByStudentDni()
+    {
+        try
+        {
+            var studentByDni = studentService.GetStudentsByDni(ReadValidDni());
+            List<StudentRecord> records = new List<StudentRecord>();
+            
+            if (studentByDni.Count > 0)
+            {
+                var studentId = studentByDni[0].Id;
+                records.AddRange(studentRecordService.GetStudentRecordsBySubjectId(studentId));
+                DisplayStudentRecords(records);
+            }
+            
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
 
     public void AddStudentRecord()
     {
@@ -207,6 +229,45 @@ public class StudentRecordController(
 
         return id;
     }
+    private string ReadValidDni()
+    {
+        return ReadValidInput<string>("DNI (7 u 8 dígitos numéricos)", IsDniValid);
+    }
+    private T ReadValidInput<T>(string prompt, Func<string, bool> isValid)
+    {
+        const string promptStyle = "╚═══> ";
+        string input;
+
+        while (true)
+        {
+            Console.Write($"{promptStyle}{prompt}: ");
+            input = Console.ReadLine()?.Trim() ?? throw new InvalidOperationException();
+
+            if (isValid(input))
+            {
+                try
+                {
+                    return (T)Convert.ChangeType(input, typeof(T));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: No se pudo convertir '{input}' a tipo {typeof(T).Name}. {ex.Message}");
+                }
+            }
+            else
+            {
+                Console.WriteLine(
+                    $"Error: Valor ingresado no válido para '{prompt.TrimEnd(':')}'. Inténtelo nuevamente.");
+            }
+        }
+    }
+
+
+    private bool IsDniValid(string dni)
+    {
+        return !string.IsNullOrEmpty(dni) && dni.Length >= 7 && dni.Length <= 8 && dni.All(char.IsDigit);
+    }
+    
 
     private decimal ReadValidDecimal(string prompt)
     {

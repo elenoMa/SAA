@@ -121,6 +121,19 @@ public class StudentController
             throw;
         }
     }
+
+    public void ShowStudentByDni()
+    {
+        try
+        {
+            DisplayStudents(_studentService.GetStudentsByDni(ReadValidDni()));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Ocurrio un error al tratar de buscar el aluimno por DNI :: {e.Message}");
+            throw;
+        }
+    }
     public void UpdateStudent()
     {
         try

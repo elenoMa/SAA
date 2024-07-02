@@ -82,15 +82,18 @@ namespace SAA
                             StudentController.ShowStudentByStudentId();
                             break;
                         case "5":
-                            StudentController.AddStudent();
+                            StudentController.ShowStudentByDni();
                             break;
                         case "6":
-                            StudentController.UpdateStudent();
+                            StudentController.AddStudent();
                             break;
                         case "7":
-                            StudentController.DeleteStudent();
+                            StudentController.UpdateStudent();
                             break;
                         case "8":
+                            StudentController.DeleteStudent();
+                            break;
+                        case "9":
                             return;
                         default:
                             Console.WriteLine("Opción no válida. Por favor, seleccione una opción válida.");
@@ -181,18 +184,21 @@ namespace SAA
                             StudentRecordController.ShowStudentRecordsByStudentId();
                             break;
                         case "3":
-                            StudentRecordController.ShowStudentRecordsBySubjectId();
+                            StudentRecordController.ShowStudentRecordsByStudentDni();
                             break;
                         case "4":
-                            StudentRecordController.AddStudentRecord();
+                            StudentRecordController.ShowStudentRecordsBySubjectId();
                             break;
                         case "5":
-                            StudentRecordController.UpdateStudentRecord();
+                            StudentRecordController.AddStudentRecord();
                             break;
                         case "6":
-                            StudentRecordController.DeleteStudentRecord();
+                            StudentRecordController.UpdateStudentRecord();
                             break;
                         case "7":
+                            StudentRecordController.DeleteStudentRecord();
+                            break;
+                        case "8":
                             return;
                         default:
                             Console.WriteLine("Opción no válida. Por favor, seleccione una opción válida.");
@@ -212,15 +218,16 @@ namespace SAA
         private static void ShowStudentRecordMenu()
         {
             Console.WriteLine("╔══════════════════════════════════════════╗");
-            Console.WriteLine("║       Gestión de Notas de Alumnos        ║");
+            Console.WriteLine("║        Gestión de Notas de Alumnos       ║");
             Console.WriteLine("╠══════════════════════════════════════════╣");
             Console.WriteLine("║ [1] Mostrar todos los registros          ║");
-            Console.WriteLine("║ [2] Mostrar registros de alumno por id   ║");
-            Console.WriteLine("║ [3] Mostrar registros de materia por id  ║");
-            Console.WriteLine("║ [4] Alta de registro                     ║");
-            Console.WriteLine("║ [5] Modificación de registro             ║");
-            Console.WriteLine("║ [6] Baja de registro                     ║");
-            Console.WriteLine("║ [7] Volver al menú principal             ║");
+            Console.WriteLine("║ [2] Mostrar registros de alumno por ID   ║");
+            Console.WriteLine("║ [3] Mostrar registros de alumno por DNI  ║");
+            Console.WriteLine("║ [4] Mostrar registros de materia por ID  ║");
+            Console.WriteLine("║ [5] Alta de registro                     ║");
+            Console.WriteLine("║ [6] Modificación de registro             ║");
+            Console.WriteLine("║ [7] Baja de registro                     ║");
+            Console.WriteLine("║ [8] Volver al menú principal             ║");
             Console.WriteLine("╚══════════════════════════════════════════╝");
             Console.Write("Seleccione una opción: ");
         }
@@ -249,10 +256,11 @@ namespace SAA
             Console.WriteLine("║ [2] Mostrar alumnos activos              ║");
             Console.WriteLine("║ [3] Mostrar alumnos inactivos            ║");
             Console.WriteLine("║ [4] Buscar Alumno por ID                 ║");
-            Console.WriteLine("║ [5] Alta de alumno                       ║");
-            Console.WriteLine("║ [6] Modificación de alumno               ║");
-            Console.WriteLine("║ [7] Baja de alumno                       ║");
-            Console.WriteLine("║ [8] Volver al menú principal             ║");
+            Console.WriteLine("║ [5] Buscar Alumno por DNI                ║");
+            Console.WriteLine("║ [6] Alta de alumno                       ║");
+            Console.WriteLine("║ [7] Modificación de alumno               ║");
+            Console.WriteLine("║ [8] Baja de alumno                       ║");
+            Console.WriteLine("║ [9] Volver al menú principal             ║");
             Console.WriteLine("╚══════════════════════════════════════════╝");
             Console.Write("Seleccione una opción: ");
         }
@@ -292,7 +300,7 @@ namespace SAA
             foreach (string line in lines)
             {
                 Console.WriteLine(line);
-                Thread.Sleep(50);
+                Thread.Sleep(30);
             }
 
             Console.WriteLine("\nPresione cualquier tecla para continuar...");

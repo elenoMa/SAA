@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using SAA.Models;
 using SAA.Services.impl;
 
@@ -10,6 +11,7 @@ namespace SAA.Services
     {
         private static readonly StudentRecordService _instance = new StudentRecordService(new PersistenceService());
         private readonly IPersistenceService _persistenceService;
+        private readonly IStudentService _studentService;
         private readonly string _resourceName = "student_records";
 
         // Constructor privado para evitar instanciación externa

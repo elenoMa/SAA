@@ -28,6 +28,11 @@ namespace SAA.Services
             return _persistenceService.GetById<Student>(studentId, "students");
         }
 
+        public List<Student>? GetStudentsByDni(string dni) // Nuevo método
+        {
+            return _persistenceService.GetByProperty<Student>("DNI", dni, "students");
+        }
+
         public void AddStudent(Student student)
         {
             _persistenceService.AddOrUpdate(student, "students");
