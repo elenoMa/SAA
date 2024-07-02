@@ -17,8 +17,7 @@ namespace SAA.Services.impl
         public List<T>? GetAll<T>(string resourceName)
         {
             var filePath = GetFilePath(resourceName);
-            List<T>? entities;
-            new List<T>();
+            List<T>? entities = new List<T>();
 
             try
             {
@@ -51,6 +50,23 @@ namespace SAA.Services.impl
         {
             var entities = GetAll<T>(resourceName);
             return (entities ?? throw new InvalidOperationException()).FirstOrDefault(e => GetIdFromEntity(e).Equals(id));
+        }
+
+        public List<T>? GetByProperty<T>(string propertyName, object propertyValue, string resourceName)
+        {
+            var entities = GetAll<T>(resourceName);
+            if (entities == null)
+            {
+                return null;
+            }
+
+            var propertyInfo = typeof(T).GetProperty(propertyName);
+            if (propertyInfo == null)
+            {
+                throw new InvalidOperationException($"La propiedad '{propertyName}' no existe en el tipo '{typeof(T).Name}'.");
+            }
+
+            return entities.Where(e => propertyInfo.GetValue(e)?.Equals(propertyValue) == true).ToList();
         }
 
         public void AddOrUpdate<T>(T entity, string resourceName)
