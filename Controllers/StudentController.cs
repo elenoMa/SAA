@@ -95,6 +95,27 @@ public class StudentController
         }
     }
 
+    public void ShowStudentByStudentId()
+    {
+        try
+        {
+            var studentId = ReadValidId("Ingrese el ID del alumno a buscar: ");
+            if (studentId == -1)
+            {
+                return;
+            }
+
+            List<Student> student = new List<Student>();
+            
+            student.Add(_studentService.GetStudentById(studentId) ?? throw new InvalidOperationException());
+            DisplayStudents(student);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
     public void UpdateStudent()
     {
         try
