@@ -71,7 +71,6 @@ El proyecto está organizado en distintos componentes:
 - **Controladores:** Implementa la lógica de la aplicación, manipulando datos y gestionando interacciones.
 - **Entrada Principal (`Program.cs`):** Punto de entrada y control principal de la aplicación.
 
-## Requisitos del Sistema
+## Documentación de cada capa de abstracción
 
-- **.NET Core SDK:** Versión 3.1 o superior.
-- **Visual Studio / Visual Studio Code:** Para la edición y ejecución del proyecto.
+Dentro de directorio del proyecto (Models, Controllers, Services, Services/Impl, Resourses) se encuntra un archivo Readme.md con documentación especifica para la capa.
