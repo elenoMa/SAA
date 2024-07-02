@@ -3,9 +3,9 @@
     "Id": 1,
     "StudentId": 2,
     "SubjectId": 2,
-    "Status": "Reprobado",
-    "Grade": 33,
-    "Date": "2024-07-02T15:02:44.741462-03:00"
+    "Status": "Aprobado",
+    "Grade": 45,
+    "Date": "2024-07-02T18:37:10.9578798-03:00"
   },
   {
     "Id": 2,
@@ -54,5 +54,13 @@
     "Status": "Aprobado",
     "Grade": 70,
     "Date": "2024-07-02T17:26:13.947099-03:00"
+  },
+  {
+    "Id": 8,
+    "StudentId": 1,
+    "SubjectId": 1,
+    "Status": "Aprobado",
+    "Grade": 45,
+    "Date": "2024-07-02T18:10:20.2903387-03:00"
   }
 ]

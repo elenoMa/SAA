@@ -45,7 +45,7 @@ public class StudentRecordController
     {
         try
         {
-            var studentId = ReadValidId("Ingrese el ID del alumno: ");
+            var studentId = ReadValidId("Ingrese el ID del alumno");
             if (studentId == -1)
                 return;
 
@@ -65,7 +65,7 @@ public class StudentRecordController
     {
         try
         {
-            var subjectId = ReadValidId("Ingrese el ID de la materia: ");
+            var subjectId = ReadValidId("Ingrese el ID de la materia");
             if (subjectId == -1)
                 return;
 
@@ -110,7 +110,7 @@ public class StudentRecordController
         {
             Console.WriteLine("\nAgregar Nuevo Registro Académico:");
 
-            var studentId = ReadValidId("ID del Alumno: ");
+            var studentId = ReadValidId("ID del Alumno");
             if (studentId == -1)
                 return;
 
@@ -121,7 +121,7 @@ public class StudentRecordController
                 return;
             }
 
-            var subjectId = ReadValidId("ID de la Materia: ");
+            var subjectId = ReadValidId("ID de la Materia");
             if (subjectId == -1)
                 return;
 
@@ -132,11 +132,11 @@ public class StudentRecordController
                 return;
             }
 
-            var grade = ReadValidDecimal("Nota: ");
+            var grade = ReadValidDecimal("Nota");
             if (grade == -1)
                 return;
 
-            var status = ReadNonEmptyString("Estado (Aprobado/Reprobado): ");
+            var status = ReadNonEmptyString("Estado (Aprobado/Reprobado)");
 
             var newRecord = new StudentRecord
             {
@@ -163,8 +163,39 @@ public class StudentRecordController
     {
         try
         {
-            // Implementación de la actualización de registro académico
-            Console.WriteLine("Método UpdateStudentRecord() aún no implementado.");
+            Console.WriteLine("\nModificación de Registro:");
+
+            var recordId = ReadValidId("ID de registro");
+
+            if (recordId == -1) return;
+
+            var recordToUpdate = studentRecordService.GetStudentRecordById(recordId);
+            if (recordToUpdate == null)
+            {
+                Console.WriteLine("No se encontró ningún registro con ese ID.");
+                return;
+            }
+
+            List<StudentRecord> recordToDisplay = new List<StudentRecord>();
+            recordToDisplay.Add(recordToUpdate);
+            Console.WriteLine($"Alumno seleccionado: ");
+            DisplayStudentRecords(recordToDisplay);
+
+            var newStudentId = ReadValidId("ID de alumno");
+            recordToUpdate.StudentId = newStudentId;
+
+            var newSubjectId = ReadValidId("ID de Materia");
+            recordToUpdate.SubjectId = newSubjectId;
+            
+            UpdateRecordStatus(recordToUpdate);
+
+            var newGrade = ReadValidDecimal("Nueva nota");
+            recordToUpdate.Grade = newGrade;
+            
+            recordToUpdate.Date = DateTime.Now;
+            
+            studentRecordService.UpdateStudentRecord(recordToUpdate);
+            Console.WriteLine("Datos del registro actualizados correctamente.");
         }
         catch (Exception ex)
         {
@@ -253,7 +284,7 @@ public class StudentRecordController
         int id;
         do
         {
-            Console.Write(prompt);
+            Console.Write($"╚═══> {prompt}: ");
             if (!int.TryParse(Console.ReadLine(), out id))
             {
                 Console.WriteLine("ID inválido. Debe ingresar un número.");
@@ -312,7 +343,7 @@ public class StudentRecordController
         decimal result;
         do
         {
-            Console.Write(prompt);
+            Console.Write($"╚═══> {prompt}: ");
             if (!decimal.TryParse(Console.ReadLine(), out result))
             {
                 Console.WriteLine("Valor inválido. Debe ingresar un número decimal.");
@@ -329,11 +360,43 @@ public class StudentRecordController
         string input;
         do
         {
-            Console.Write(prompt);
+            Console.Write($"╚═══> {prompt}: ");
             input = Console.ReadLine()?.Trim() ?? throw new InvalidOperationException();
             if (string.IsNullOrEmpty(input)) Console.WriteLine("Error: El valor no puede estar vacío.");
         } while (string.IsNullOrEmpty(input));
 
         return input;
+    }
+    
+    //Cambia el estado de un Registro
+    private void UpdateRecordStatus(StudentRecord recordToUpdate)
+    {
+        bool aux = true;
+        if (string.IsNullOrEmpty(recordToUpdate.Status) && string.Equals("Aprobado", recordToUpdate.Status))
+        {
+            Console.Write("¿Desea cambiar cambiar estado a Reprobado? (s/n): ");
+            aux = false;
+        }
+        else
+            Console.Write("¿Desea cambiar el estado a Aprobado? (s/n): ");
+
+        var changeOption = Console.ReadLine();
+        if (changeOption != null && changeOption.ToLower() == "s")
+        {
+            if (aux)
+            {
+                recordToUpdate.Status = "Aprobado";
+            }
+            else
+            {
+                recordToUpdate.Status = "Reprobado";
+            }
+            Console.WriteLine(
+                $"Estado del alumno actualizado correctamente. Ahora está {(aux ? "Aprobado" : "Reprobado")}.");
+        }
+        else
+        {
+            Console.WriteLine("No se realizaron cambios en el estado del alumno.");
+        }
     }
 }

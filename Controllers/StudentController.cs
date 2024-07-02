@@ -172,9 +172,11 @@ public class StudentController
                 return;
             }
 
-            Console.WriteLine(
-                $"Alumno seleccionado: {studentToUpdate.FirstName} {studentToUpdate.LastName} (DNI: {studentToUpdate.DNI})");
-
+            List<Student> studentToDisplay = new List<Student>();
+            studentToDisplay.Add(studentToUpdate);
+            Console.WriteLine($"Alumno seleccionado: ");
+            DisplayStudents(studentToDisplay);
+            
             var newFirstName = ReadValidInput<string>("Nuevo Nombre", input => !string.IsNullOrEmpty(input));
             if (!string.IsNullOrEmpty(newFirstName)) studentToUpdate.FirstName = newFirstName;
 

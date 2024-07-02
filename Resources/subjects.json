@@ -6,17 +6,17 @@
   },
   {
     "Id": 2,
-    "Name": "Programacion I",
+    "Name": "2",
     "IsActive": false
   },
   {
     "Id": 3,
-    "Name": "Programación III",
+    "Name": "Programaci\u00F3n III",
     "IsActive": true
   },
   {
     "Id": 4,
-    "Name": "Inglés Avanzado",
+    "Name": "Ingl\u00E9s Avanzado",
     "IsActive": true
   },
   {
@@ -31,22 +31,22 @@
   },
   {
     "Id": 7,
-    "Name": "Física Moderna",
+    "Name": "F\u00EDsica Moderna",
     "IsActive": true
   },
   {
     "Id": 8,
-    "Name": "Química Orgánica",
+    "Name": "Qu\u00EDmica Org\u00E1nica",
     "IsActive": false
   },
   {
     "Id": 9,
-    "Name": "Economía Internacional",
+    "Name": "Econom\u00EDa Internacional",
     "IsActive": true
   },
   {
     "Id": 10,
-    "Name": "Biología Molecular",
+    "Name": "Biolog\u00EDa Molecular",
     "IsActive": true
   }
 ]
