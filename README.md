@@ -59,7 +59,7 @@ El programa utiliza menús interactivos para facilitar la navegación y operacio
   ```
   
 - **Menús Específicos**: Cada gestión (alumnos, materias, registros) tiene su propio menú con opciones específicas para operar sobre los datos:
-- 
+  
 ```bash
   ╔══════════════════════════════════════════╗
   ║            Gestión de Alumnos            ║
