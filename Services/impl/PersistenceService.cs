@@ -1,4 +1,8 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 
 namespace SAA.Services.impl
 {
@@ -7,18 +11,20 @@ namespace SAA.Services.impl
         private readonly string _basePath;
         private static readonly Lazy<PersistenceService> instance = new Lazy<PersistenceService>(() => new PersistenceService());
 
+        // Propiedad estática para acceder a la instancia única
         public static PersistenceService Instance => instance.Value;
 
+        // Constructor privado para inicializar la ruta base
         public PersistenceService()
         {
             _basePath = GetBasePath();
         }
 
+        // Obtiene todos los elementos del recurso especificado.
         public List<T>? GetAll<T>(string resourceName)
         {
             var filePath = GetFilePath(resourceName);
-            List<T>? entities;
-            new List<T>();
+            List<T>? entities = new List<T>();
 
             try
             {
@@ -47,12 +53,32 @@ namespace SAA.Services.impl
             return entities;
         }
 
+        // Obtiene un elemento por su ID del recurso especificado.
         public T? GetById<T>(int id, string resourceName)
         {
             var entities = GetAll<T>(resourceName);
             return (entities ?? throw new InvalidOperationException()).FirstOrDefault(e => GetIdFromEntity(e).Equals(id));
         }
 
+        // Obtiene elementos por una propiedad específica del recurso especificado.
+        public List<T>? GetByProperty<T>(string propertyName, object propertyValue, string resourceName)
+        {
+            var entities = GetAll<T>(resourceName);
+            if (entities == null)
+            {
+                return null;
+            }
+
+            var propertyInfo = typeof(T).GetProperty(propertyName);
+            if (propertyInfo == null)
+            {
+                throw new InvalidOperationException($"La propiedad '{propertyName}' no existe en el tipo '{typeof(T).Name}'.");
+            }
+
+            return entities.Where(e => propertyInfo.GetValue(e)?.Equals(propertyValue) == true).ToList();
+        }
+
+        // Agrega o actualiza un elemento en el recurso especificado.
         public void AddOrUpdate<T>(T entity, string resourceName)
         {
             var filePath = GetFilePath(resourceName);
@@ -78,6 +104,7 @@ namespace SAA.Services.impl
             SaveEntities(entities, filePath);
         }
 
+        // Elimina un elemento por su ID del recurso especificado.
         public void Delete<T>(int id, string resourceName)
         {
             var filePath = GetFilePath(resourceName);
@@ -89,6 +116,7 @@ namespace SAA.Services.impl
             }
         }
 
+        // Método privado para obtener la ruta base del directorio de recursos.
         private string GetBasePath()
         {
             var currentDirectory = Directory.GetCurrentDirectory();
@@ -102,11 +130,13 @@ namespace SAA.Services.impl
             throw new InvalidOperationException();
         }
 
+        // Método privado para obtener la ruta del archivo del recurso específico.
         private string GetFilePath(string resourceName)
         {
             return Path.Combine(_basePath, $"{resourceName.ToLower()}.json");
         }
 
+        // Método privado para guardar los elementos en el archivo JSON.
         private void SaveEntities<T>(List<T>? entities, string filePath)
         {
             try
@@ -129,6 +159,7 @@ namespace SAA.Services.impl
             }
         }
 
+        // Método privado para obtener el ID de la entidad genérica.
         private int GetIdFromEntity<T>(T entity)
         {
             if (entity != null)
@@ -143,6 +174,7 @@ namespace SAA.Services.impl
             throw new InvalidOperationException("La entidad no tiene una propiedad 'Id' válida o de tipo correcto.");
         }
 
+        // Método privado para establecer el ID de la entidad genérica.
         private void SetIdForEntity<T>(T entity, int id)
         {
             var idProp = entity?.GetType().GetProperty("Id");

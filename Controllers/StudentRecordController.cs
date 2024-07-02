@@ -4,11 +4,27 @@ using SAA.Services;
 
 namespace SAA.Controllers;
 
-public class StudentRecordController(
-    IStudentRecordService studentRecordService,
-    IStudentService studentService,
-    ISubjectService subjectService)
+// Controlador para gestionar los registros académicos de los estudiantes
+public class StudentRecordController
 {
+    private readonly IStudentRecordService studentRecordService;
+    private readonly IStudentService studentService;
+    private readonly ISubjectService subjectService;
+
+    // Constructor que recibe servicios necesarios para operaciones de registros académicos
+    public StudentRecordController(
+        IStudentRecordService studentRecordService,
+        IStudentService studentService,
+        ISubjectService subjectService)
+    {
+        this.studentRecordService = studentRecordService;
+        this.studentService = studentService;
+        this.subjectService = subjectService;
+    }
+
+    /// <summary>
+    /// Muestra todos los registros académicos.
+    /// </summary>
     public void ShowAllStudentRecords()
     {
         try
@@ -22,6 +38,9 @@ public class StudentRecordController(
         }
     }
 
+    /// <summary>
+    /// Muestra los registros académicos de un estudiante por su ID.
+    /// </summary>
     public void ShowStudentRecordsByStudentId()
     {
         try
@@ -39,7 +58,9 @@ public class StudentRecordController(
         }
     }
 
-
+    /// <summary>
+    /// Muestra los registros académicos de una materia por su ID.
+    /// </summary>
     public void ShowStudentRecordsBySubjectId()
     {
         try
@@ -57,7 +78,32 @@ public class StudentRecordController(
         }
     }
 
+    /// <summary>
+    /// Muestra los registros académicos de un estudiante por su DNI.
+    /// </summary>
+    public void ShowStudentRecordsByStudentDni()
+    {
+        try
+        {
+            var studentByDni = studentService.GetStudentsByDni(ReadValidDni());
+            List<StudentRecord> records = new List<StudentRecord>();
 
+            if (studentByDni.Count > 0)
+            {
+                var studentId = studentByDni[0].Id;
+                records.AddRange(studentRecordService.GetStudentRecordsByStudentId(studentId));
+                DisplayStudentRecords(records);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al buscar registros académicos por DNI de alumno: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Agrega un nuevo registro académico.
+    /// </summary>
     public void AddStudentRecord()
     {
         try
@@ -110,6 +156,9 @@ public class StudentRecordController(
         }
     }
 
+    /// <summary>
+    /// Actualización de un registro académico (aún no implementado).
+    /// </summary>
     public void UpdateStudentRecord()
     {
         try
@@ -123,6 +172,9 @@ public class StudentRecordController(
         }
     }
 
+    /// <summary>
+    /// Elimina un registro académico.
+    /// </summary>
     public void DeleteStudentRecord()
     {
         try
@@ -152,6 +204,10 @@ public class StudentRecordController(
         }
     }
 
+
+    // Métodos privados de apoyo
+
+    // Muestra los registros académicos en formato de tabla
     private void DisplayStudentRecords(List<StudentRecord>? records)
     {
         const int tableWidth = 76; // Ancho total de la tabla, incluyendo los bordes
@@ -160,19 +216,18 @@ public class StudentRecordController(
         Console.WriteLine("\n╔════════╦════════════╦═════════════╦══════╦═══════════╦════════════════════╗");
         Console.WriteLine("║   ID   ║ Alumno ID  ║ Materia ID  ║ Nota ║   Estado  ║        Fecha       ║");
         Console.WriteLine("╠════════╬════════════╬═════════════╬══════╬═══════════╠════════════════════╣");
-        
+
         if (records.Count == 0)
         {
-
-            Console.WriteLine("║".PadRight(tableWidth ) + "║");
-            string centeredMessage = "No se encontraron registros académicos.".PadLeft((tableWidth + "No se encontraron registros académicos.".Length) / 2).PadRight(tableWidth - 1);
+            Console.WriteLine("║".PadRight(tableWidth) + "║");
+            string centeredMessage = "No se encontraron registros académicos."
+                .PadLeft((tableWidth + "No se encontraron registros académicos.".Length) / 2).PadRight(tableWidth - 1);
             Console.WriteLine($"║{centeredMessage}║");
-            Console.WriteLine("║".PadRight(tableWidth ) + "║");
+            Console.WriteLine("║".PadRight(tableWidth) + "║");
             Console.WriteLine("╚════════╩════════════╩═════════════╩══════╩═══════════╩════════════════════╝");
 
             return;
         }
-
 
 
         // Filas de datos
@@ -192,6 +247,7 @@ public class StudentRecordController(
         Console.WriteLine("╚════════╩════════════╩═════════════╩══════╩═══════════╩════════════════════╝");
     }
 
+    // Lee un ID válido desde la entrada estándar
     private int ReadValidId(string prompt)
     {
         int id;
@@ -208,6 +264,49 @@ public class StudentRecordController(
         return id;
     }
 
+    // Lee un DNI válido desde la entrada estándar
+    private string ReadValidDni()
+    {
+        return ReadValidInput<string>("DNI (7 u 8 dígitos numéricos)", IsDniValid);
+    }
+
+    // Lee una entrada válida desde la entrada estándar según una validación específica
+    private T ReadValidInput<T>(string prompt, Func<string, bool> isValid)
+    {
+        const string promptStyle = "╚═══> ";
+        string input;
+
+        while (true)
+        {
+            Console.Write($"{promptStyle}{prompt}: ");
+            input = Console.ReadLine()?.Trim() ?? throw new InvalidOperationException();
+
+            if (isValid(input))
+            {
+                try
+                {
+                    return (T)Convert.ChangeType(input, typeof(T));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: No se pudo convertir '{input}' a tipo {typeof(T).Name}. {ex.Message}");
+                }
+            }
+            else
+            {
+                Console.WriteLine(
+                    $"Error: Valor ingresado no válido para '{prompt.TrimEnd(':')}'. Inténtelo nuevamente.");
+            }
+        }
+    }
+
+    // Verifica si un DNI es válido
+    private bool IsDniValid(string dni)
+    {
+        return !string.IsNullOrEmpty(dni) && dni.Length >= 7 && dni.Length <= 8 && dni.All(char.IsDigit);
+    }
+
+    // Lee un decimal válido desde la entrada estándar
     private decimal ReadValidDecimal(string prompt)
     {
         decimal result;
@@ -224,6 +323,7 @@ public class StudentRecordController(
         return result;
     }
 
+    // Lee una cadena no vacía desde la entrada estándar
     private string ReadNonEmptyString(string prompt)
     {
         string input;

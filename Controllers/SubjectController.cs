@@ -3,13 +3,24 @@ using SAA.Services;
 
 namespace SAA.Controllers;
 
-public class SubjectController(ISubjectService subjectService)
+public class SubjectController
 {
+    private readonly ISubjectService _subjectService;
+
+    // Constructor que recibe una instancia de ISubjectService
+    public SubjectController(ISubjectService subjectService)
+    {
+        _subjectService = subjectService;
+    }
+
+    /// <summary>
+    /// Muestra todas las materias.
+    /// </summary>
     public void ShowAllSubjects()
     {
         try
         {
-            var subjects = subjectService.GetAllSubjects();
+            var subjects = _subjectService.GetAllSubjects();
             DisplaySubjects(subjects);
         }
         catch (Exception ex)
@@ -18,6 +29,10 @@ public class SubjectController(ISubjectService subjectService)
             Console.WriteLine("Ocurrió un error al mostrar todas las materias.");
         }
     }
+
+    /// <summary>
+    /// Muestra una materia por su ID.
+    /// </summary>
     public void ShowSubjectById()
     {
         try
@@ -29,22 +44,25 @@ public class SubjectController(ISubjectService subjectService)
             }
 
             List<Subject> subject = new List<Subject>();
-            
-            Subject subjectById = subjectService.GetSubjectById(subjectId);
+            Subject subjectById = _subjectService.GetSubjectById(subjectId);
 
             if (subjectById != null)
             {
                 subject.Add(subjectById);
             }
+
             DisplaySubjects(subject);
         }
         catch (Exception ex)
         {
             LogError(ex);
-            Console.WriteLine($"Ocurrió un error al obtener la materia :: {ex.Message}");
+            Console.WriteLine($"Ocurrió un error al obtener la materia: {ex.Message}");
         }
     }
 
+    /// <summary>
+    /// Agrega una nueva materia.
+    /// </summary>
     public void AddSubject()
     {
         try
@@ -53,7 +71,7 @@ public class SubjectController(ISubjectService subjectService)
 
             var name = ReadNonEmptyString("Nombre de la Materia: ");
 
-            var existingSubject = subjectService.GetAllSubjects()?.Find(s => s.Name == name);
+            var existingSubject = _subjectService.GetAllSubjects()?.Find(s => s.Name == name);
             if (existingSubject != null)
             {
                 Console.WriteLine("Error: Ya existe una materia con ese nombre.");
@@ -66,7 +84,7 @@ public class SubjectController(ISubjectService subjectService)
                 IsActive = true
             };
 
-            subjectService.AddSubject(newSubject);
+            _subjectService.AddSubject(newSubject);
             Console.WriteLine("Materia agregada correctamente.");
         }
         catch (Exception ex)
@@ -76,6 +94,9 @@ public class SubjectController(ISubjectService subjectService)
         }
     }
 
+    /// <summary>
+    /// Actualiza una materia existente.
+    /// </summary>
     public void UpdateSubject()
     {
         try
@@ -85,7 +106,7 @@ public class SubjectController(ISubjectService subjectService)
             var subjectId = ReadValidId("Ingrese el ID de la materia a modificar: ");
             if (subjectId == -1) return;
 
-            var subjectToUpdate = subjectService.GetSubjectById(subjectId);
+            var subjectToUpdate = _subjectService.GetSubjectById(subjectId);
             if (subjectToUpdate == null)
             {
                 Console.WriteLine("No se encontró ninguna materia con ese ID.");
@@ -97,7 +118,7 @@ public class SubjectController(ISubjectService subjectService)
             var newName = ReadValidInput<string>("Nuevo Nombre de la Materia: ", input => !string.IsNullOrEmpty(input));
             if (!string.IsNullOrEmpty(newName)) subjectToUpdate.Name = newName;
 
-            subjectService.UpdateSubject(subjectToUpdate);
+            _subjectService.UpdateSubject(subjectToUpdate);
             Console.WriteLine("Datos de la materia actualizados correctamente.");
         }
         catch (Exception ex)
@@ -107,6 +128,9 @@ public class SubjectController(ISubjectService subjectService)
         }
     }
 
+    /// <summary>
+    /// Elimina una materia por su ID.
+    /// </summary>
     public void DeleteSubject()
     {
         try
@@ -116,7 +140,7 @@ public class SubjectController(ISubjectService subjectService)
             var subjectId = ReadValidId("Ingrese el ID de la materia a dar de baja: ");
             if (subjectId == -1) return;
 
-            var subjectToDelete = subjectService.GetSubjectById(subjectId);
+            var subjectToDelete = _subjectService.GetSubjectById(subjectId);
             if (subjectToDelete == null)
             {
                 Console.WriteLine("No se encontró ninguna materia con ese ID.");
@@ -127,7 +151,7 @@ public class SubjectController(ISubjectService subjectService)
             var confirmation = Console.ReadLine();
             if (confirmation != null && confirmation.Equals("s", StringComparison.CurrentCultureIgnoreCase))
             {
-                subjectService.DeleteSubject(subjectId);
+                _subjectService.DeleteSubject(subjectId);
                 Console.WriteLine("Materia dada de baja correctamente.");
             }
         }
@@ -137,6 +161,7 @@ public class SubjectController(ISubjectService subjectService)
             Console.WriteLine("Ocurrió un error al dar de baja la materia.");
         }
     }
+
 
     // Métodos privados de apoyo
 
@@ -178,7 +203,7 @@ public class SubjectController(ISubjectService subjectService)
         Console.WriteLine("\n╔════════╦═════════════════════════════════════╦════════╗");
         Console.WriteLine("║   ID   ║                  Nombre             ║ Activa ║");
         Console.WriteLine("╠════════╬═════════════════════════════════════╬════════╣");
-        
+
         if (subjects.Count == 0)
         {
             Console.WriteLine("║".PadRight(tableWidth) + "║");
@@ -190,7 +215,7 @@ public class SubjectController(ISubjectService subjectService)
             Console.WriteLine("╚════════╩═════════════════════════════════════╩════════╝");
             return;
         }
-        
+
         // Filas de datos
         foreach (var subject in subjects)
         {
@@ -201,7 +226,7 @@ public class SubjectController(ISubjectService subjectService)
             Console.WriteLine($"║ {id} ║ {name} ║ {isActive.PadRight(6)} ║");
         }
 
-// Pie de la tabla
+        //  Pie de la tabla
         Console.WriteLine("╚════════╩═════════════════════════════════════╩════════╝");
     }
 

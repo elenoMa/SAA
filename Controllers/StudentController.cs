@@ -13,6 +13,9 @@ public class StudentController
         this._studentService = studentService;
     }
 
+    /// <summary>
+    /// Muestra todos los alumnos.
+    /// </summary>
     public void ShowAllStudents()
     {
         try
@@ -27,6 +30,9 @@ public class StudentController
         }
     }
 
+    /// <summary>
+    /// Muestra los alumnos activos.
+    /// </summary>
     public void ShowActiveStudents()
     {
         try
@@ -41,6 +47,9 @@ public class StudentController
         }
     }
 
+    /// <summary>
+    /// Muestra los alumnos inactivos.
+    /// </summary>
     public void ShowInactiveStudents()
     {
         try
@@ -55,6 +64,9 @@ public class StudentController
         }
     }
 
+    /// <summary>
+    /// Agrega un nuevo alumno.
+    /// </summary>
     public void AddStudent()
     {
         try
@@ -95,6 +107,9 @@ public class StudentController
         }
     }
 
+    /// <summary>
+    /// Muestra un alumno por su ID.
+    /// </summary>
     public void ShowStudentByStudentId()
     {
         try
@@ -106,21 +121,41 @@ public class StudentController
             }
 
             List<Student> student = new List<Student>();
-            
+
             Student studentById = _studentService.GetStudentById(studentId);
             if (studentById != null)
             {
                 student.Add(studentById);
             }
-            
+
             DisplayStudents(student);
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Ocurrio un error al obtener el alumno por ID :: {e.Message} ");
+            Console.WriteLine($"Ocurrió un error al obtener el alumno por ID :: {e.Message} ");
             throw;
         }
     }
+
+    /// <summary>
+    /// Muestra un alumno por su DNI.
+    /// </summary>
+    public void ShowStudentByDni()
+    {
+        try
+        {
+            DisplayStudents(_studentService.GetStudentsByDni(ReadValidDni()));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Ocurrió un error al tratar de buscar el alumno por DNI :: {e.Message}");
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Actualiza los datos de un alumno.
+    /// </summary>
     public void UpdateStudent()
     {
         try
@@ -177,6 +212,9 @@ public class StudentController
         }
     }
 
+    /// <summary>
+    /// Elimina un alumno.
+    /// </summary>
     public void DeleteStudent()
     {
         try
@@ -208,7 +246,6 @@ public class StudentController
             Console.WriteLine("Ocurrió un error al dar de baja al alumno.");
         }
     }
-
     // Métodos privados de apoyo
 
     private Student CreateStudent(string firstName, string lastName, string dni, DateTime birthDate, string address)
@@ -363,7 +400,7 @@ public class StudentController
             "║   ID   ║             Nombre             ║       DNI      ║ Activo ║ Fecha de Nac.  ║                      Dirección                     ║");
         Console.WriteLine(
             "╠════════╬════════════════════════════════╬════════════════╬════════╬════════════════╬════════════════════════════════════════════════════╣");
-        
+
         if (students.Count == 0)
         {
             // Console.WriteLine(
@@ -387,7 +424,8 @@ public class StudentController
                 (student.FirstName + " " + student.LastName).PadRight(30); // Aumentar el espacio para el nombre
             string dni = student.DNI.PadRight(14);
             string isActive = student.IsActive ? "Sí" : "No";
-            string dateOfBirth = student.DateOfBirth.ToLocalTime().ToShortDateString().PadRight(14); // Formatear la fecha
+            string dateOfBirth =
+                student.DateOfBirth.ToLocalTime().ToShortDateString().PadRight(14); // Formatear la fecha
             string address = student.Address.PadRight(50); // Aumentar el espacio para la dirección
 
             Console.WriteLine($"║ {id} ║ {name} ║ {dni} ║ {isActive.PadRight(6)} ║ {dateOfBirth} ║ {address} ║");
