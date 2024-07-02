@@ -56,7 +56,7 @@ public class SubjectController
         catch (Exception ex)
         {
             LogError(ex);
-            Console.WriteLine($"Ocurrió un error al obtener la materia: {ex.Message}");
+            Console.WriteLine($"Ocurrió un error al obtener la materia :: {ex.Message}");
         }
     }
 
@@ -69,7 +69,7 @@ public class SubjectController
         {
             Console.WriteLine("\nIngreso de Nueva Materia:");
 
-            var name = ReadNonEmptyString("Nombre de la Materia: ");
+            var name = ReadNonEmptyString("Nombre de la Materia");
 
             var existingSubject = _subjectService.GetAllSubjects()?.Find(s => s.Name == name);
             if (existingSubject != null)
@@ -115,7 +115,7 @@ public class SubjectController
 
             Console.WriteLine($"Materia seleccionada: {subjectToUpdate.Name}");
 
-            var newName = ReadValidInput<string>("Nuevo Nombre de la Materia: ", input => !string.IsNullOrEmpty(input));
+            var newName = ReadValidInput<string>("Nuevo Nombre de la Materia", input => !string.IsNullOrEmpty(input));
             if (!string.IsNullOrEmpty(newName)) subjectToUpdate.Name = newName;
 
             _subjectService.UpdateSubject(subjectToUpdate);
@@ -175,8 +175,13 @@ public class SubjectController
         int id;
         do
         {
-            Console.Write(prompt);
-        } while (!int.TryParse(Console.ReadLine(), out id));
+            Console.Write($"╚═══> {prompt}: ");
+            if (!int.TryParse(Console.ReadLine(), out id))
+            {
+                Console.WriteLine("ID inválido. Debe ingresar un número.");
+                id = -1;
+            }
+        } while (id == -1);
 
         return id;
     }
@@ -186,7 +191,7 @@ public class SubjectController
         string input;
         do
         {
-            Console.Write(prompt);
+            Console.Write($"╚═══> {prompt}: ");
             input = Console.ReadLine()?.Trim() ?? throw new InvalidOperationException();
             if (input != null && !isValid(input))
                 Console.WriteLine(

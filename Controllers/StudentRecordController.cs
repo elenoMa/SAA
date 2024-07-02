@@ -45,7 +45,7 @@ public class StudentRecordController
     {
         try
         {
-            var studentId = ReadValidId("Ingrese el ID del alumno: ");
+            var studentId = ReadValidId("Ingrese el ID del alumno");
             if (studentId == -1)
                 return;
 
@@ -65,7 +65,7 @@ public class StudentRecordController
     {
         try
         {
-            var subjectId = ReadValidId("Ingrese el ID de la materia: ");
+            var subjectId = ReadValidId("Ingrese el ID de la materia");
             if (subjectId == -1)
                 return;
 
@@ -110,7 +110,7 @@ public class StudentRecordController
         {
             Console.WriteLine("\nAgregar Nuevo Registro Académico:");
 
-            var studentId = ReadValidId("ID del Alumno: ");
+            var studentId = ReadValidId("ID del Alumno");
             if (studentId == -1)
                 return;
 
@@ -121,7 +121,7 @@ public class StudentRecordController
                 return;
             }
 
-            var subjectId = ReadValidId("ID de la Materia: ");
+            var subjectId = ReadValidId("ID de la Materia");
             if (subjectId == -1)
                 return;
 
@@ -132,11 +132,11 @@ public class StudentRecordController
                 return;
             }
 
-            var grade = ReadValidDecimal("Nota: ");
+            var grade = ReadValidDecimal("Nota");
             if (grade == -1)
                 return;
 
-            var status = ReadNonEmptyString("Estado (Aprobado/Reprobado): ");
+            var status = ReadNonEmptyString("Estado (Aprobado/Reprobado)");
 
             var newRecord = new StudentRecord
             {
@@ -253,7 +253,7 @@ public class StudentRecordController
         int id;
         do
         {
-            Console.Write(prompt);
+            Console.Write($"╚═══> {prompt}: ");
             if (!int.TryParse(Console.ReadLine(), out id))
             {
                 Console.WriteLine("ID inválido. Debe ingresar un número.");
@@ -312,7 +312,7 @@ public class StudentRecordController
         decimal result;
         do
         {
-            Console.Write(prompt);
+            Console.Write($"╚═══> {prompt}: ");
             if (!decimal.TryParse(Console.ReadLine(), out result))
             {
                 Console.WriteLine("Valor inválido. Debe ingresar un número decimal.");
@@ -329,7 +329,7 @@ public class StudentRecordController
         string input;
         do
         {
-            Console.Write(prompt);
+            Console.Write($"╚═══> {prompt}: ");
             input = Console.ReadLine()?.Trim() ?? throw new InvalidOperationException();
             if (string.IsNullOrEmpty(input)) Console.WriteLine("Error: El valor no puede estar vacío.");
         } while (string.IsNullOrEmpty(input));
