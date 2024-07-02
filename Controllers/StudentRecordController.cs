@@ -183,7 +183,7 @@ public class StudentRecordController(
             string subjectId = record.SubjectId.ToString().PadRight(11);
             string grade = record.Grade.ToString(CultureInfo.InvariantCulture).PadRight(4);
             string status = record.Status.PadRight(9); // Ajustar espacio para estado
-            string date = record.Date.ToString("yyyy-MM-dd").PadRight(18); // Formatear la fecha
+            string date = record.Date.ToLocalTime().ToShortDateString().PadRight(18); // Formatear la fecha
 
             Console.WriteLine($"║ {id} ║ {studentId} ║ {subjectId} ║ {grade} ║ {status} ║ {date} ║");
         }

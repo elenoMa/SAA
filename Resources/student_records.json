@@ -1,23 +1,10 @@
 [
   {
-    "Id": 3,
+    "Id": 1,
     "StudentId": 2,
     "SubjectId": 2,
-    "Status": "Aprobado",
-<<<<<<< Updated upstream
-    "Grade": 100,
-    "Date": "2024-07-01T02:24:46.0371642-03:00"
-=======
-    "Grade": 2,
-    "Date": "2024-06-25T19:12:38.1196551-03:00"
-  },
-  {
-    "Id": 3,
-    "StudentId": 2,
-    "SubjectId": 3,
-    "Status": "Aprobado",
-    "Grade": 69,
-    "Date": "2024-07-01T15:53:44.8557835-03:00"
->>>>>>> Stashed changes
+    "Status": "Reprobado",
+    "Grade": 33,
+    "Date": "2024-07-02T15:02:44.741462-03:00"
   }
 ]

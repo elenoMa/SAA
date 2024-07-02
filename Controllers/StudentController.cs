@@ -107,12 +107,17 @@ public class StudentController
 
             List<Student> student = new List<Student>();
             
-            student.Add(_studentService.GetStudentById(studentId) ?? throw new InvalidOperationException());
+            Student studentById = _studentService.GetStudentById(studentId);
+            if (studentById != null)
+            {
+                student.Add(studentById);
+            }
+            
             DisplayStudents(student);
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Console.WriteLine($"Ocurrio un error al obtener el alumno por ID :: {e.Message} ");
             throw;
         }
     }
@@ -382,7 +387,7 @@ public class StudentController
                 (student.FirstName + " " + student.LastName).PadRight(30); // Aumentar el espacio para el nombre
             string dni = student.DNI.PadRight(14);
             string isActive = student.IsActive ? "Sí" : "No";
-            string dateOfBirth = student.DateOfBirth.ToShortDateString().PadRight(14); // Formatear la fecha
+            string dateOfBirth = student.DateOfBirth.ToLocalTime().ToShortDateString().PadRight(14); // Formatear la fecha
             string address = student.Address.PadRight(50); // Aumentar el espacio para la dirección
 
             Console.WriteLine($"║ {id} ║ {name} ║ {dni} ║ {isActive.PadRight(6)} ║ {dateOfBirth} ║ {address} ║");
