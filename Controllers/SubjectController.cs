@@ -13,7 +13,9 @@ public class SubjectController
         _subjectService = subjectService;
     }
 
-    // Muestra todas las materias
+    /// <summary>
+    /// Muestra todas las materias.
+    /// </summary>
     public void ShowAllSubjects()
     {
         try
@@ -28,7 +30,9 @@ public class SubjectController
         }
     }
 
-    // Muestra una materia por su ID
+    /// <summary>
+    /// Muestra una materia por su ID.
+    /// </summary>
     public void ShowSubjectById()
     {
         try
@@ -56,7 +60,9 @@ public class SubjectController
         }
     }
 
-    // Agrega una nueva materia
+    /// <summary>
+    /// Agrega una nueva materia.
+    /// </summary>
     public void AddSubject()
     {
         try
@@ -88,7 +94,9 @@ public class SubjectController
         }
     }
 
-    // Actualiza una materia existente
+    /// <summary>
+    /// Actualiza una materia existente.
+    /// </summary>
     public void UpdateSubject()
     {
         try
@@ -120,7 +128,9 @@ public class SubjectController
         }
     }
 
-    // Elimina una materia por su ID
+    /// <summary>
+    /// Elimina una materia por su ID.
+    /// </summary>
     public void DeleteSubject()
     {
         try
@@ -151,6 +161,7 @@ public class SubjectController
             Console.WriteLine("Ocurrió un error al dar de baja la materia.");
         }
     }
+
 
     // Métodos privados de apoyo
 
@@ -215,7 +226,7 @@ public class SubjectController
             Console.WriteLine($"║ {id} ║ {name} ║ {isActive.PadRight(6)} ║");
         }
 
-    //  Pie de la tabla
+        //  Pie de la tabla
         Console.WriteLine("╚════════╩═════════════════════════════════════╩════════╝");
     }
 

@@ -6,5 +6,37 @@
     "Status": "Reprobado",
     "Grade": 33,
     "Date": "2024-07-02T15:02:44.741462-03:00"
+  },
+  {
+    "Id": 2,
+    "StudentId": 1,
+    "SubjectId": 3,
+    "Status": "Aprobado",
+    "Grade": 85,
+    "Date": "2024-06-30T10:15:00.0000000Z"
+  },
+  {
+    "Id": 3,
+    "StudentId": 3,
+    "SubjectId": 1,
+    "Status": "Aprobado",
+    "Grade": 92,
+    "Date": "2024-07-01T14:30:00.0000000Z"
+  },
+  {
+    "Id": 4,
+    "StudentId": 4,
+    "SubjectId": 2,
+    "Status": "Reprobado",
+    "Grade": 45,
+    "Date": "2024-07-01T09:45:00.0000000Z"
+  },
+  {
+    "Id": 5,
+    "StudentId": 2,
+    "SubjectId": 1,
+    "Status": "Aprobado",
+    "Grade": 78,
+    "Date": "2024-06-29T16:00:00.0000000Z"
   }
 ]

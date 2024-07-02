@@ -22,7 +22,9 @@ public class StudentRecordController
         this.subjectService = subjectService;
     }
 
-    // Muestra todos los registros académicos
+    /// <summary>
+    /// Muestra todos los registros académicos.
+    /// </summary>
     public void ShowAllStudentRecords()
     {
         try
@@ -36,7 +38,9 @@ public class StudentRecordController
         }
     }
 
-    // Muestra los registros académicos de un estudiante por su ID
+    /// <summary>
+    /// Muestra los registros académicos de un estudiante por su ID.
+    /// </summary>
     public void ShowStudentRecordsByStudentId()
     {
         try
@@ -54,7 +58,9 @@ public class StudentRecordController
         }
     }
 
-    // Muestra los registros académicos de una materia por su ID
+    /// <summary>
+    /// Muestra los registros académicos de una materia por su ID.
+    /// </summary>
     public void ShowStudentRecordsBySubjectId()
     {
         try
@@ -72,7 +78,9 @@ public class StudentRecordController
         }
     }
 
-    // Muestra los registros académicos de un estudiante por su DNI
+    /// <summary>
+    /// Muestra los registros académicos de un estudiante por su DNI.
+    /// </summary>
     public void ShowStudentRecordsByStudentDni()
     {
         try
@@ -93,7 +101,9 @@ public class StudentRecordController
         }
     }
 
-    // Agrega un nuevo registro académico
+    /// <summary>
+    /// Agrega un nuevo registro académico.
+    /// </summary>
     public void AddStudentRecord()
     {
         try
@@ -146,7 +156,9 @@ public class StudentRecordController
         }
     }
 
-    // Actualización de un registro académico (aún no implementado)
+    /// <summary>
+    /// Actualización de un registro académico (aún no implementado).
+    /// </summary>
     public void UpdateStudentRecord()
     {
         try
@@ -160,7 +172,9 @@ public class StudentRecordController
         }
     }
 
-    // Elimina un registro académico
+    /// <summary>
+    /// Elimina un registro académico.
+    /// </summary>
     public void DeleteStudentRecord()
     {
         try
@@ -189,6 +203,7 @@ public class StudentRecordController
             Console.WriteLine($"Error al eliminar registro académico: {ex.Message}");
         }
     }
+
 
     // Métodos privados de apoyo
 
