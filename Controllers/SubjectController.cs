@@ -18,6 +18,32 @@ public class SubjectController(ISubjectService subjectService)
             Console.WriteLine("Ocurrió un error al mostrar todas las materias.");
         }
     }
+    public void ShowSubjectById()
+    {
+        try
+        {
+            var subjectId = ReadValidId("Ingrese el ID de la materia: ");
+            if (subjectId == -1)
+            {
+                return;
+            }
+
+            List<Subject> subject = new List<Subject>();
+            
+            Subject subjectById = subjectService.GetSubjectById(subjectId);
+
+            if (subjectById != null)
+            {
+                subject.Add(subjectById);
+            }
+            DisplaySubjects(subject);
+        }
+        catch (Exception ex)
+        {
+            LogError(ex);
+            Console.WriteLine($"Ocurrió un error al obtener la materia :: {ex.Message}");
+        }
+    }
 
     public void AddSubject()
     {
@@ -27,7 +53,7 @@ public class SubjectController(ISubjectService subjectService)
 
             var name = ReadNonEmptyString("Nombre de la Materia: ");
 
-            var existingSubject = subjectService.GetAllSubjects().Find(s => s.Name == name);
+            var existingSubject = subjectService.GetAllSubjects()?.Find(s => s.Name == name);
             if (existingSubject != null)
             {
                 Console.WriteLine("Error: Ya existe una materia con ese nombre.");
