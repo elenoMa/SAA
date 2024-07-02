@@ -7,21 +7,46 @@
   {
     "Id": 2,
     "Name": "Programacion I",
-    "IsActive": true
+    "IsActive": false
   },
   {
     "Id": 3,
-    "Name": "Programaci\u00F3n III",
+    "Name": "Programación III",
     "IsActive": true
   },
   {
     "Id": 4,
-    "Name": "3",
+    "Name": "Inglés Avanzado",
     "IsActive": true
   },
   {
     "Id": 5,
-    "Name": "2",
+    "Name": "Historia Argentina",
+    "IsActive": true
+  },
+  {
+    "Id": 6,
+    "Name": "Literatura Universal",
+    "IsActive": true
+  },
+  {
+    "Id": 7,
+    "Name": "Física Moderna",
+    "IsActive": true
+  },
+  {
+    "Id": 8,
+    "Name": "Química Orgánica",
+    "IsActive": false
+  },
+  {
+    "Id": 9,
+    "Name": "Economía Internacional",
+    "IsActive": true
+  },
+  {
+    "Id": 10,
+    "Name": "Biología Molecular",
     "IsActive": true
   }
 ]
