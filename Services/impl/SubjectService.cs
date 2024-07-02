@@ -18,26 +18,31 @@ namespace SAA.Services
         // Propiedad estática para acceder a la instancia única
         public static SubjectService Instance => _instance;
 
+        // Obtiene todas las materias almacenadas.
         public List<Subject>? GetAllSubjects()
         {
             return _persistenceService.GetAll<Subject>("subjects");
         }
 
+        // Obtiene una materia por su ID.
         public Subject? GetSubjectById(int subjectId)
         {
             return _persistenceService.GetById<Subject>(subjectId, "subjects");
         }
 
+        // Agrega una nueva materia o actualiza una existente.
         public void AddSubject(Subject subject)
         {
             _persistenceService.AddOrUpdate(subject, "subjects");
         }
 
+        // Actualiza los datos de una materia existente.
         public void UpdateSubject(Subject subject)
         {
             _persistenceService.AddOrUpdate(subject, "subjects");
         }
 
+        // Elimina una materia por su ID.
         public void DeleteSubject(int subjectId)
         {
             _persistenceService.Delete<Subject>(subjectId, "subjects");

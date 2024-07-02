@@ -5,18 +5,19 @@ namespace SAA
 {
     public class Program
     {
+        // Servicios y controladores utilizados en el programa
         private static readonly IStudentService StudentService = Services.StudentService.Instance;
         private static readonly ISubjectService SubjectService = Services.SubjectService.Instance;
         private static readonly IStudentRecordService StudentRecordService = Services.StudentRecordService.Instance;
 
         private static readonly StudentController StudentController = new StudentController(StudentService);
         private static readonly SubjectController SubjectController = new SubjectController(SubjectService);
-
         private static readonly StudentRecordController StudentRecordController =
             new StudentRecordController(StudentRecordService, StudentService, SubjectService);
 
         public static void Main(string[] args)
         {
+            // Dibuja el arte ASCII al inicio del programa
             DrawAsciiArt();
 
             while (true)
@@ -49,7 +50,7 @@ namespace SAA
             }
         }
 
-
+        // Función para pausar y esperar la entrada del usuario
         private static void PauseForUser()
         {
             Console.WriteLine("Presione una tecla para continuar...");
@@ -57,6 +58,7 @@ namespace SAA
             Console.Clear();
         }
 
+        // Función para manejar las opciones del menú de estudiantes
         private static void ManageStudents()
         {
             Console.Clear();
@@ -106,7 +108,7 @@ namespace SAA
                 }
                 catch (FormatException ex)
                 {
-                    Console.WriteLine($"Error: Formato inválido. Asegúrese de ingresar el dato correcto ::  {ex.Message}");
+                    Console.WriteLine($"Error: Formato inválido. Asegúrese de ingresar el dato correcto: {ex.Message}");
                 }
                 catch (Exception ex)
                 {
@@ -118,7 +120,7 @@ namespace SAA
             }
         }
 
-
+        // Función para manejar las opciones del menú de asignaturas
         private static void ManageSubjects()
         {
             Console.Clear();
@@ -164,7 +166,7 @@ namespace SAA
             }
         }
 
-
+        // Función para manejar las opciones del menú de registros de estudiantes
         private static void ManageStudentRecords()
         {
             Console.Clear();
@@ -214,7 +216,8 @@ namespace SAA
                 Console.Clear();
             }
         }
-
+        
+        // Función para mostrar el menú de registros de estudiantes
         private static void ShowStudentRecordMenu()
         {
             Console.WriteLine("╔══════════════════════════════════════════╗");
@@ -232,6 +235,7 @@ namespace SAA
             Console.Write("Seleccione una opción: ");
         }
 
+        // Función para mostrar el menú de asignaturas
         private static void ShowSubjectMenu()
         {
             Console.WriteLine("╔══════════════════════════════════════════╗");
@@ -246,7 +250,8 @@ namespace SAA
             Console.WriteLine("╚══════════════════════════════════════════╝");
             Console.Write("Seleccione una opción: ");
         }
-
+        
+        // Función para mostrar el menú de estudiantes
         private static void ShowStudentMenu()
         {
             Console.WriteLine("╔══════════════════════════════════════════╗");
@@ -265,6 +270,7 @@ namespace SAA
             Console.Write("Seleccione una opción: ");
         }
 
+        // Función para mostrar el menú principal
         private static void ShowMainMenu()
         {
             Console.WriteLine("╔══════════════════════════════════════════╗");
@@ -277,7 +283,8 @@ namespace SAA
             Console.WriteLine("╚══════════════════════════════════════════╝");
             Console.Write("Seleccione una opción: ");
         }
-
+        
+        // Función para dibujar el arte ASCII al inicio del programa
         private static void DrawAsciiArt()
         {
             string[] lines = new string[]

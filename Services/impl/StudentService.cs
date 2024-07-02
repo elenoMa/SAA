@@ -18,36 +18,43 @@ namespace SAA.Services
         // Propiedad estática para acceder a la instancia única
         public static StudentService Instance => _instance;
 
+        // Obtiene todos los estudiantes almacenados.
         public List<Student>? GetAllStudents()
         {
             return _persistenceService.GetAll<Student>("students");
         }
 
+        // Obtiene un estudiante por su ID.
         public Student? GetStudentById(int studentId)
         {
             return _persistenceService.GetById<Student>(studentId, "students");
         }
 
-        public List<Student>? GetStudentsByDni(string dni) // Nuevo método
+        // Obtiene estudiantes por su número de DNI.
+        public List<Student>? GetStudentsByDni(string dni)
         {
             return _persistenceService.GetByProperty<Student>("DNI", dni, "students");
         }
 
+        // Agrega un nuevo estudiante o actualiza uno existente.
         public void AddStudent(Student student)
         {
             _persistenceService.AddOrUpdate(student, "students");
         }
 
+        // Actualiza los datos de un estudiante existente.
         public void UpdateStudent(Student student)
         {
             _persistenceService.AddOrUpdate(student, "students");
         }
 
+        // Elimina un estudiante por su ID.
         public void DeleteStudent(int studentId)
         {
             _persistenceService.Delete<Student>(studentId, "students");
         }
 
+        // Verifica si un número de DNI está disponible (no duplicado entre estudiantes activos).
         public bool IsDniAvailable(string dni)
         {
             List<Student>? students = GetAllStudents();
