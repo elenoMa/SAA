@@ -27,12 +27,8 @@ El `StudentRecordController` gestiona las operaciones relacionadas con los regis
 - **ShowStudentRecordsByStudentId()**: Muestra registros académicos filtrados por ID de alumno.
 - **ShowStudentRecordsBySubjectId()**: Muestra registros académicos filtrados por ID de materia.
 - **AddStudentRecord()**: Agrega un nuevo registro académico al sistema.
-- **UpdateStudentRecord()**: Actualiza un registro académico existente (pendiente de implementación).
+- **UpdateStudentRecord()**: Actualiza un registro académico existente.
 - **DeleteStudentRecord()**: Elimina un registro académico del sistema.
-
-### Notas:
-
-- El método `UpdateStudentRecord()` está planeado pero aún no está implementado en el código proporcionado.
 
 ## SubjectController
 
