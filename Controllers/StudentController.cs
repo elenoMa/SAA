@@ -64,6 +64,7 @@ public class StudentController
         }
     }
 
+
     /// <summary>
     /// Agrega un nuevo alumno.
     /// </summary>
@@ -73,8 +74,8 @@ public class StudentController
         {
             Console.WriteLine("\nIngreso de Nuevo Alumno:");
 
-            var firstName = ReadNonEmptyString("Nombre");
-            var lastName = ReadNonEmptyString("Apellido");
+            var firstName = ReadName("Nombre");
+            var lastName = ReadName("Apellido");
             var dni = ReadValidDni();
             var birthDate = ReadValidBirthDate();
             var address = ReadNonEmptyString("Domicilio");
@@ -177,10 +178,10 @@ public class StudentController
             Console.WriteLine($"Alumno seleccionado: ");
             DisplayStudents(studentToDisplay);
             
-            var newFirstName = ReadValidInput<string>("Nuevo Nombre", input => !string.IsNullOrEmpty(input));
+            var newFirstName = ReadName("Nuevo Nombre");
             if (!string.IsNullOrEmpty(newFirstName)) studentToUpdate.FirstName = newFirstName;
 
-            var newLastName = ReadValidInput<string>("Nuevo Apellido", input => !string.IsNullOrEmpty(input));
+            var newLastName = ReadName("Nuevo Apellido");
             if (!string.IsNullOrEmpty(newLastName)) studentToUpdate.LastName = newLastName;
 
             var newDni = ReadValidInput<string>("Nuevo DNI (7 u 8 dígitos numéricos)", IsDniValid);
@@ -271,6 +272,17 @@ public class StudentController
     private string ReadNonEmptyString(string prompt)
     {
         return ReadValidInput<string>(prompt, input => !string.IsNullOrEmpty(input));
+    }
+    
+    public string ReadName(string prompt)
+    {
+        string name = ReadValidInput<string>(prompt, input => 
+            !string.IsNullOrEmpty(input) && 
+            input.Length <= 50 && 
+            System.Text.RegularExpressions.Regex.IsMatch(input, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$")
+        );
+    
+        return name
     }
 
     private DateTime ReadValidBirthDate()
