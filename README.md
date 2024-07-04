@@ -122,6 +122,7 @@ El programa utiliza menús interactivos para facilitar la navegación y operacio
     ╚════════╩════════════╩═════════════╩══════╩═══════════╩════════════════════╝
     Presione una tecla para continuar...
   ```
+  > Es recomendable que el programa se ejecute en pantalla completa, para evitar problemas con la visualizacion de la estructura de las diferentes tablas.
 
 - **Promps**: Se muestran cuando es necesario solicitar al usuario un dato por consola:
 
