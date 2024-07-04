@@ -281,8 +281,8 @@ public class StudentController
             input.Length <= 50 && 
             System.Text.RegularExpressions.Regex.IsMatch(input, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$")
         );
-    
-        return name
+
+        return name;
     }
 
     private DateTime ReadValidBirthDate()
