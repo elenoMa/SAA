@@ -178,7 +178,7 @@ public class StudentRecordController
 
             List<StudentRecord> recordToDisplay = new List<StudentRecord>();
             recordToDisplay.Add(recordToUpdate);
-            Console.WriteLine($"Alumno seleccionado: ");
+            Console.WriteLine($"Registro seleccionado: ");
             DisplayStudentRecords(recordToDisplay);
 
             var newStudentId = ReadValidId("ID de alumno");

@@ -97,5 +97,23 @@
     "DateOfBirth": "2000-03-31T00:00:00",
     "Address": "Calfucura 220, Carhue",
     "IsActive": true
+  },
+  {
+    "Id": 12,
+    "FirstName": "MAriano",
+    "LastName": "Eleno",
+    "DNI": "4255544",
+    "DateOfBirth": "1999-12-12T00:00:00",
+    "Address": "Sin numero",
+    "IsActive": true
+  },
+  {
+    "Id": 13,
+    "FirstName": "Juan perez",
+    "LastName": "Pereira",
+    "DNI": "56777888",
+    "DateOfBirth": "1999-07-12T00:00:00",
+    "Address": "Sin numero",
+    "IsActive": true
   }
 ]
