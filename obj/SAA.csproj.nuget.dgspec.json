@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mariano\\RiderProjects\\SAA\\SAA\\SAA.csproj": {}
+    "/home/mariano/Documentos/tecnicatura/proyecto/SAA/SAA.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mariano\\RiderProjects\\SAA\\SAA\\SAA.csproj": {
+    "/home/mariano/Documentos/tecnicatura/proyecto/SAA/SAA.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mariano\\RiderProjects\\SAA\\SAA\\SAA.csproj",
+        "projectUniqueName": "/home/mariano/Documentos/tecnicatura/proyecto/SAA/SAA.csproj",
         "projectName": "SAA",
-        "projectPath": "C:\\Users\\Mariano\\RiderProjects\\SAA\\SAA\\SAA.csproj",
-        "packagesPath": "C:\\Users\\Mariano\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mariano\\RiderProjects\\SAA\\SAA\\obj\\",
+        "projectPath": "/home/mariano/Documentos/tecnicatura/proyecto/SAA/SAA.csproj",
+        "packagesPath": "/home/mariano/.nuget/packages/",
+        "outputPath": "/home/mariano/Documentos/tecnicatura/proyecto/SAA/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Mariano\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/home/mariano/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -53,7 +53,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.206/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.105/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
